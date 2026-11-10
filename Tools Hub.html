@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xentro Studios — The Ultimate Creative Toolkit for Editors & Designers</title>
+  <meta name="description" content="10 focused, high-retention browser tools built by Xentro Studios for video editors, motion designers, and creative teams." />
+
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            xentro: {
+              50: '#EEF2FF',
+              100: '#E0E7FF',
+              200: '#C7D2FE',
+              300: '#A5B4FC',
+              400: '#818CF8',
+              500: '#6366F1',
+              600: '#5842FF',
+              700: '#4338CA',
+              800: '#3730A3',
+              900: '#1E1B4B',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Draftr Multi-Layered Purple Ambient Mesh Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(88, 66, 255, 0.12) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(99, 102, 241, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(129, 140, 248, 0.06) 0px, transparent 45%);
+    }
+
+    /* Soft Draftr Card Elevation */
+    .draftr-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 4px 20px -2px rgba(88, 66, 255, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .draftr-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(199, 210, 254, 0.9);
+      box-shadow: 0 20px 35px -5px rgba(88, 66, 255, 0.1), 0 10px 15px -5px rgba(15, 23, 42, 0.04);
+    }
+
+    /* Draftr Interactive Canvas Glow & Bezier Accents */
+    .curve-glow {
+      filter: drop-shadow(0 6px 14px rgba(88, 66, 255, 0.45));
+    }
+    .btn-gradient {
+      background: linear-gradient(135deg, #5842FF 0%, #6366F1 100%);
+      box-shadow: 0 4px 14px 0 rgba(88, 66, 255, 0.28);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #4C35E6 0%, #5842FF 100%);
+      box-shadow: 0 6px 20px 0 rgba(88, 66, 255, 0.38);
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] min-h-screen flex flex-col antialiased selection:bg-[#5842FF] selection:text-white">
+
+  <!-- ==================== HEADER (DRAFTR GLASSMORPHISM) ==================== -->
+  <header class="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between sticky top-0 z-50 backdrop-blur-md bg-white/75 border-b border-slate-200/50">
+    
+    <!-- Brand Logo: Image 2 Ref in Clean White Theme (No dot) -->
+    <a href="/" class="flex items-center gap-3.5 select-none group">
+      <div class="w-10 h-10 rounded-[14px] bg-[#5842FF] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition duration-300">
+        X
+      </div>
+      <div class="flex flex-col">
+        <div class="flex items-center gap-1.5 leading-none">
+          <span class="text-xl font-extrabold tracking-tight text-[#0F172A]">Xentro</span>
+          <span class="text-xl font-extrabold tracking-tight text-[#6366F1]">Studios</span>
+        </div>
+        <span class="text-xs font-semibold text-[#64748B] tracking-tight mt-1">Create your own dreams</span>
+      </div>
+    </a>
+
+    <!-- Display-only Unclickable Nav Links -->
+    <nav class="hidden md:flex items-center gap-9 text-sm font-semibold text-slate-500 select-none">
+      <span class="cursor-default hover:text-slate-500">Home</span>
+      <span class="cursor-default hover:text-slate-500">Tools</span>
+      <span class="cursor-default hover:text-slate-500">Pages</span>
+      <span class="cursor-default hover:text-slate-500">Contact</span>
+    </nav>
+
+    <!-- Header Action Button with Hover Status Tooltip -->
+    <div class="relative group">
+      <button type="button" class="px-5 py-2.5 rounded-full btn-gradient text-white text-xs font-bold tracking-wide cursor-not-allowed select-none flex items-center gap-2 transition duration-200">
+        Get started
+        <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+
+      <!-- Tooltip Panel -->
+      <div class="absolute right-0 top-full mt-2.5 hidden group-hover:flex items-center gap-2.5 bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl border border-indigo-100 text-xs font-semibold text-slate-700 whitespace-nowrap z-50 transition-all duration-200">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span>Under progress</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION (DRAFTR STYLE) ==================== -->
+  <main class="flex-1 max-w-7xl mx-auto px-6 pt-14 pb-28">
+    <div class="text-center max-w-3xl mx-auto mb-20">
+      
+      <!-- Purple Chip Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur border border-indigo-100 text-[#5842FF] text-xs font-bold shadow-sm mb-6">
+        <span class="w-2 h-2 rounded-full bg-[#5842FF] animate-pulse"></span>
+        Xentro Creative Engine Suite
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0F172A] leading-[1.12] mb-6">
+        The ultimate toolkit for <br class="hidden sm:inline" />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#0F172A] via-[#5842FF] to-[#6366F1]">designers & editors</span>
+      </h1>
+      <p class="text-[#64748B] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
+        Everything you need to create, prototype, format feedback, and collaborate — all in a single, high-speed browser platform.
+      </p>
+    </div>
+
+    <!-- ==================== CATEGORY 1: MOTION & VISUAL ENGINES ==================== -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-7 border-b border-slate-200/60 pb-3">
+        <div class="flex items-center gap-3">
+          <span class="h-5 w-1.5 bg-[#5842FF] rounded-full shadow-sm shadow-indigo-400"></span>
+          <h2 class="text-xl font-extrabold text-[#0F172A] tracking-tight">Motion & Visual Engines</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full">3 Tools Live</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Tool 1: 3D Title Studio -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#FFF7ED] via-[#FFF1F2] to-[#EEF2FF] border border-orange-100/80 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-amber-700 border border-amber-200/60 shadow-sm">WebGL Canvas</span>
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-indigo-700 border border-indigo-200/60 font-mono-code shadow-sm">4K Alpha</span>
+              </div>
+              <div class="flex items-center justify-center my-auto z-10">
+                <div class="w-36 h-20 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-[#5842FF] shadow-xl flex items-center justify-center transform -rotate-3 group-hover:rotate-0 group-hover:scale-105 transition duration-300">
+                  <span class="text-white text-3xl font-black tracking-wider drop-shadow-md">3D</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono-code text-amber-900/80 font-bold z-10">
+                <span>Extrude: 45px</span>
+                <span>Bevel: Round</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">3D Title & Text Studio</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Create 3D vector titles, customize extrusion depth and lighting, and export transparent alpha animations directly in browser.
+            </p>
+          </div>
+          <a href="/title-studio.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 2: Motion Curve & Easing Studio -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#EEF2FF] via-[#F5F3FF] to-[#FAF5FF] border border-indigo-100 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#5842FF] border border-indigo-100 font-mono-code shadow-sm">
+                  cubic-bezier(0.25, 1, 0.5, 1)
+                </span>
+                <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold shadow-sm">
+                  easeOutQuart
+                </span>
+              </div>
+              <div class="relative w-full h-32 my-auto">
+                <div class="absolute inset-0 grid grid-cols-4 grid-rows-3 opacity-30">
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-indigo-200"></div>
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-r border-indigo-200"></div>
+                  <div class="border-b border-indigo-200"></div>
+                </div>
+                <svg class="w-full h-full overflow-visible" viewBox="0 0 300 120" preserveAspectRatio="none">
+                  <line x1="20" y1="105" x2="95" y2="15" stroke="#818CF8" stroke-width="2" stroke-dasharray="3 3" />
+                  <line x1="280" y1="15" x2="150" y2="15" stroke="#5842FF" stroke-width="2" stroke-dasharray="3 3" />
+                  <path d="M 20 105 C 95 15, 150 15, 280 15" fill="none" stroke="#5842FF" stroke-width="4.5" stroke-linecap="round" class="curve-glow" />
+                  <circle cx="20" cy="105" r="5" fill="#4338CA" />
+                  <circle cx="280" cy="15" r="5" fill="#5842FF" />
+                  <circle cx="95" cy="15" r="6.5" fill="#818CF8" stroke="#ffffff" stroke-width="2.5" />
+                  <circle cx="150" cy="15" r="6.5" fill="#5842FF" stroke="#ffffff" stroke-width="2.5" />
+                </svg>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <div class="px-4 py-1.5 rounded-full bg-white/95 backdrop-blur shadow-sm border border-indigo-100 flex items-center gap-2">
+                  <span class="w-4 h-4 rounded-full bg-[#5842FF] text-white flex items-center justify-center text-[10px] font-bold">⚡</span>
+                  <span class="text-xs font-bold text-[#0F172A]">Bezier Curve Studio</span>
+                </div>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Motion Curve & Easing</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Visually craft cubic-bezier speed curves, preview acceleration live, and copy ready-to-paste keyframe values for After Effects.
+            </p>
+          </div>
+          <a href="/easing-curve-studio.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 3: Social Media Safe Zone Overlay -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#FFF1F2] via-[#FDF2F8] to-[#EEF2FF] border border-rose-200/60 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-rose-700 border border-rose-200 shadow-sm">9:16 Vertical</span>
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#5842FF] border border-indigo-100 shadow-sm">Reels & Shorts</span>
+              </div>
+              <div class="flex items-center justify-center my-auto z-10">
+                <div class="w-32 h-36 rounded-2xl border-2 border-dashed border-rose-400 bg-white/80 backdrop-blur p-2.5 flex flex-col justify-between shadow-sm group-hover:scale-105 transition duration-300">
+                  <div class="flex items-center justify-between text-[9px] font-mono-code text-rose-600 font-bold px-1">
+                    <span>Header UI</span>
+                    <span>1080px</span>
+                  </div>
+                  <div class="w-full py-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center gap-1.5 text-emerald-700 font-extrabold text-[11px]">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 100% Safe Zone
+                  </div>
+                  <div class="flex items-center justify-between text-[9px] font-mono-code text-rose-600 font-bold px-1">
+                    <span>Captions & CTA</span>
+                    <span>1920px</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-slate-200 shadow-sm">
+                  Zero Cropped Elements
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Social Safe Zone Overlay</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Ensure your titles, lower thirds, and captions never get hidden under TikTok, Instagram Reels, or YouTube Shorts interface buttons.
+            </p>
+          </div>
+          <a href="/safe-zone.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== CATEGORY 2: POST-PRODUCTION & EDITING UTILITIES ==================== -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-7 border-b border-slate-200/60 pb-3">
+        <div class="flex items-center gap-3">
+          <span class="h-5 w-1.5 bg-[#5842FF] rounded-full shadow-sm shadow-indigo-400"></span>
+          <h2 class="text-xl font-extrabold text-[#0F172A] tracking-tight">Editing & Post-Production Utilities</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full">5 Tools Live</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Tool 4: Client Feedback Revision Formatter -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] border border-purple-200/70 p-4 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="bg-white/95 backdrop-blur rounded-xl px-3.5 py-2 shadow-sm border border-purple-100 flex items-center justify-between text-xs z-10">
+                <span class="font-bold text-[#5842FF] flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Client_Cut_v3.mp4
+                </span>
+                <span class="text-[10px] font-mono-code font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100">100% Sync</span>
+              </div>
+              <div class="space-y-2 my-auto z-10">
+                <div class="bg-white/90 p-2.5 rounded-xl border border-slate-100 flex items-center gap-2.5 opacity-60">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-mono-code font-bold">00:42</span>
+                  <span class="text-[11px] text-slate-500 line-through truncate font-medium">Cut dead air before hook dialogue</span>
+                  <span class="ml-auto text-emerald-600 font-bold text-xs">✓</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border-2 border-indigo-200 shadow-md flex flex-col gap-1 transform group-hover:scale-[1.02] transition duration-200">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-[#5842FF] text-white text-[10px] font-mono-code font-bold">01:14</span>
+                    <span class="text-xs font-bold text-slate-900 truncate">Fix Lower Third Typography</span>
+                  </div>
+                  <span class="text-[10px] text-slate-500 pl-1 truncate">Switch to Plus Jakarta Bold & add drop shadow</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-[11px] font-bold text-indigo-950/80 z-10">
+                <span>Auto-Parse WhatsApp & Transcripts</span>
+                <span class="text-[#5842FF] flex items-center gap-1 font-mono-code">⚡ Ready</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Client Feedback Formatter</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Turn messy client WhatsApp messages, voice notes, and email feedback into structured, timestamp-aligned editing checklists.
+            </p>
+          </div>
+          <a href="/client_feedback_revision_formatter.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 5: Subtitle Pacing Optimizer -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#E0F2FE] via-[#F0F9FF] to-[#EDE9FE] border border-sky-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-sky-700 border border-sky-200 shadow-sm">Reading Velocity</span>
+                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold shadow-sm">Optimal Pacing</span>
+              </div>
+              <div class="bg-white/95 backdrop-blur p-4 rounded-2xl border border-sky-100 shadow-md my-auto space-y-3 z-10 group-hover:scale-105 transition duration-300">
+                <div class="flex items-baseline justify-between">
+                  <span class="text-xs text-slate-500 font-bold">Characters / Sec:</span>
+                  <span class="text-lg font-black text-slate-900 font-mono-code">17.2 CPS</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5">
+                  <div class="bg-gradient-to-r from-sky-400 via-[#5842FF] to-emerald-500 h-full rounded-full" style="width: 74%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-mono-code text-slate-400 font-bold">
+                  <span>Slow</span>
+                  <span class="text-emerald-600 font-bold">Viral Retention</span>
+                  <span>Too Fast</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-sky-100 shadow-sm">
+                  Smart Two-Line Formatter
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Subtitle Pacing Optimizer</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Analyze characters per second (CPS) and word counts to create comfortable, viral-retention captions that viewers effortlessly read.
+            </p>
+          </div>
+          <a href="/subtitle-pacer.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 6: Script Word & Duration Counter -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#F0FDF4] to-[#EEF2FF] border border-emerald-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-emerald-700 border border-emerald-200 shadow-sm">Speech Cadence</span>
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-slate-700 text-[11px] font-mono-code font-bold shadow-sm">145 WPM</span>
+              </div>
+              <div class="text-center my-auto z-10">
+                <div class="text-4xl font-extrabold text-[#0F172A] font-mono-code tracking-tight group-hover:scale-105 transition duration-300">00:01:45</div>
+                <div class="text-xs font-bold text-emerald-600 mt-1.5 flex items-center justify-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 254 Words • Natural Tempo
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono-code text-emerald-900/80 font-bold z-10">
+                <span>Fast: 01:25</span>
+                <span>Normal: 01:45</span>
+                <span>Slow: 02:10</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Script Duration Counter</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Paste voiceover scripts to instantly calculate expected video runtimes across speaking tempos, accounting for natural breathing pauses.
+            </p>
+          </div>
+          <a href="/script-counter.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 7: Project Structure & Asset Namer -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#FEF3C7] via-[#FFFBEB] to-[#EEF2FF] border border-amber-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-amber-800 border border-amber-200 shadow-sm">Taxonomy Engine</span>
+                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-[11px] font-bold font-mono-code shadow-sm">.ZIP Export</span>
+              </div>
+              <div class="space-y-2 font-mono-code text-xs font-bold text-slate-700 my-auto z-10">
+                <div class="flex items-center gap-2.5 bg-white/95 backdrop-blur p-2 rounded-xl border border-amber-100 shadow-sm">
+                  <span class="text-lg">📁</span> 01_RAW / Cam_A_ProRes
+                </div>
+                <div class="flex items-center gap-2.5 bg-white/95 backdrop-blur p-2 rounded-xl border border-amber-100 shadow-sm">
+                  <span class="text-lg">📁</span> 02_PROJECT_FILES / Premiere
+                </div>
+                <div class="flex items-center gap-2.5 bg-white/95 backdrop-blur p-2 rounded-xl border border-amber-100 shadow-sm">
+                  <span class="text-lg">📁</span> 03_EXPORTS / Final_Master_4K
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-amber-100 shadow-sm">
+                  Standard Studio Nomenclature
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Project Asset Namer</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Generate bulletproof post-production directory structures and standardized file nomenclature to maintain clean archives.
+            </p>
+          </div>
+          <a href="/asset-namer.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 8: Video Bitrate & Size Checker -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-64 rounded-2xl bg-gradient-to-br from-[#FCE7F3] via-[#FDF2F8] to-[#EEF2FF] border border-pink-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-pink-700 border border-pink-200 shadow-sm">H.264 & ProRes</span>
+                <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-[11px] font-mono-code font-bold shadow-sm">24 Mbps Target</span>
+              </div>
+              <div class="text-center my-auto z-10">
+                <div class="text-4xl font-black text-[#0F172A] font-mono-code tracking-tight group-hover:scale-105 transition duration-300">1.42 GB</div>
+                <div class="text-xs font-bold text-pink-700 mt-1.5 flex items-center justify-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-pink-500"></span> Est. Size for 08:30 Duration
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-pink-100 shadow-sm">
+                  Discord & X Limit Safe
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Bitrate & Size Checker</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Calculate exact target bitrates and file export sizes before initiating long renders to comply with upload limits.
+            </p>
+          </div>
+          <a href="/video-size-checker.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== CATEGORY 3: BUSINESS & FREELANCE CALCULATORS ==================== -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-7 border-b border-slate-200/60 pb-3">
+        <div class="flex items-center gap-3">
+          <span class="h-5 w-1.5 bg-[#5842FF] rounded-full shadow-sm shadow-indigo-400"></span>
+          <h2 class="text-xl font-extrabold text-[#0F172A] tracking-tight">Business & Freelance Calculators</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full">2 Tools Live</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Tool 9: Video Rate & Margin Calculator -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-56 rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#F0FDF4] to-[#EEF2FF] border border-emerald-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-emerald-700 border border-emerald-200 shadow-sm">Rate Engineering</span>
+                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold shadow-sm">+35% Target Margin</span>
+              </div>
+              <div class="flex items-center justify-around my-auto z-10">
+                <div class="text-center">
+                  <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Day Rate</div>
+                  <div class="text-3xl font-black text-[#0F172A] font-mono-code">$450</div>
+                </div>
+                <div class="h-10 w-px bg-slate-200"></div>
+                <div class="text-center">
+                  <div class="text-xs text-[#5842FF] font-bold uppercase tracking-wider">Project Quote</div>
+                  <div class="text-3xl font-black text-[#5842FF] font-mono-code group-hover:scale-105 transition duration-300">$1,850</div>
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-emerald-100 shadow-sm">
+                  Overheads & Revision Cap Factored
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Rate & Margin Calculator</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Price client video edits accurately by calculating hourly floors, revision overheads, and project profit margins.
+            </p>
+          </div>
+          <a href="/rate-margin-calculator.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Tool 10: Freelancer Project Hub -->
+        <div class="draftr-card rounded-[28px] p-6 flex flex-col justify-between group">
+          <div>
+            <div class="w-full h-56 rounded-2xl bg-gradient-to-br from-[#EEF2FF] via-[#F5F3FF] to-[#FAF5FF] border border-indigo-200/70 p-5 flex flex-col justify-between relative overflow-hidden mb-6">
+              <div class="flex items-center justify-between z-10">
+                <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-indigo-700 border border-indigo-200 shadow-sm">Milestone Tracker</span>
+                <span class="px-3 py-1 rounded-full bg-[#5842FF] text-white text-[11px] font-bold shadow-sm">50% Deposit Locked</span>
+              </div>
+              <div class="space-y-2 my-auto z-10">
+                <div class="flex items-center justify-between text-xs font-bold bg-white/95 backdrop-blur p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                  <span class="text-slate-800 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Rough Cut Delivery
+                  </span>
+                  <span class="text-emerald-600 font-mono-code font-bold">Approved</span>
+                </div>
+                <div class="flex items-center justify-between text-xs font-bold bg-white/95 backdrop-blur p-2.5 rounded-xl border border-indigo-200 shadow-sm">
+                  <span class="text-slate-800 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Color & Sound Final Pass
+                  </span>
+                  <span class="text-amber-600 font-mono-code font-bold">In Review</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-center z-10">
+                <span class="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur text-xs font-bold text-slate-800 border border-indigo-100 shadow-sm">
+                  Zero Scope Creep Protection
+                </span>
+              </div>
+            </div>
+            <h3 class="text-xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Freelancer Project Hub</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6 font-medium">
+              Track video project milestones, deposit statuses, revision caps, and deliverable handoffs in one place.
+            </p>
+          </div>
+          <a href="/freelancer-tool.html" class="w-full py-3 rounded-xl btn-gradient text-white text-xs font-bold text-center tracking-wide transition flex items-center justify-center gap-1.5">
+            Launch Tool <span>&rarr;</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="w-full border-t border-slate-200/80 bg-white/80 backdrop-blur-md py-10">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64748B]">
+      <div class="flex items-center gap-2.5">
+        <div class="w-6 h-6 rounded-lg bg-[#5842FF] flex items-center justify-center text-white font-bold text-xs shadow-sm shadow-indigo-400">X</div>
+        <span class="font-extrabold text-[#0F172A]">Xentro Studios</span>
+        <span class="text-slate-400">— Create your own dreams</span>
+      </div>
+      <div class="font-semibold text-slate-600">
+        Zero tracking. Zero subscription fees.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
