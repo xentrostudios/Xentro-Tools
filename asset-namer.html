@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Structure & Asset Naming | Xentro Studios</title>
+
+  <!-- Instant Theme Script to Prevent Flash -->
+  <script>
+    if (localStorage.getItem('xentro_theme') === 'dark' || 
+       (!localStorage.getItem('xentro_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <!-- JSZip for Instant In-Browser Directory Tree Zip Packaging -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Background Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.10) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.05) 0px, transparent 45%);
+    }
+    .dark .draftr-bg {
+      background-color: #03050c;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.22) 0px, transparent 60%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.14) 0px, transparent 45%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.12) 0px, transparent 50%);
+    }
+
+    /* Outer Wrapper Card with Distinct Separation */
+    .outer-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(119, 1, 228, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      border-radius: 28px;
+      transition: all 0.25s ease;
+    }
+    .dark .outer-card {
+      background: #0d122e;
+      border: 1px solid rgba(119, 1, 228, 0.38);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 22px 0 rgba(119, 1, 228, 0.18);
+    }
+    .outer-card:hover {
+      border-color: rgba(216, 180, 254, 0.9);
+      box-shadow: 0 14px 30px -4px rgba(119, 1, 228, 0.08);
+    }
+    .dark .outer-card:hover {
+      border-color: rgba(134, 9, 251, 0.65);
+      box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75), 0 0 30px 2px rgba(134, 9, 251, 0.28);
+    }
+
+    /* Floating Item Cards & Wells */
+    .floating-pill-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+    }
+    .dark .floating-pill-card {
+      background: #070a1c;
+      border: 1px solid rgba(119, 1, 228, 0.35);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .floating-pill-card:hover {
+      border-color: #C7D2FE;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(119, 1, 228, 0.08);
+    }
+    .dark .floating-pill-card:hover {
+      border-color: #8609fb;
+      box-shadow: 0 6px 18px rgba(134, 9, 251, 0.3);
+    }
+
+    /* Primary Brand Gradient Buttons (#7701e4 to #8609fb) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7701e4 0%, #8609fb 100%);
+      box-shadow: 0 4px 14px 0 rgba(119, 1, 228, 0.35);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #6400c2 0%, #7701e4 100%);
+      box-shadow: 0 6px 22px 0 rgba(134, 9, 251, 0.5);
+    }
+
+    /* Animated Day/Night Pill Switcher */
+    .theme-toggle-btn {
+      position: relative;
+      width: 68px;
+      height: 32px;
+      border-radius: 9999px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .theme-toggle-btn .sky-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #93c5fd 100%);
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .clouds {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      width: 32px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+    .theme-toggle-btn .clouds::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .theme-toggle-btn .night-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #090d24 0%, #171d3d 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .stars {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-size: 8px;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 12px 6px 0px #fff, 6px 12px 0px #fff;
+    }
+    .theme-toggle-btn .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .dark .theme-toggle-btn {
+      border-color: rgba(119, 1, 228, 0.4);
+    }
+    .dark .theme-toggle-btn .sky-bg {
+      opacity: 0;
+    }
+    .dark .theme-toggle-btn .night-bg {
+      opacity: 1;
+    }
+    .dark .theme-toggle-btn .toggle-thumb {
+      transform: translateX(36px);
+      background: #cbd5e1;
+      box-shadow: inset -2px -2px 0 0 #94a3b8, 0 0 8px rgba(203, 213, 225, 0.4);
+    }
+
+    /* Minimalist Floating Tooltips */
+    [data-tip] {
+      position: relative;
+    }
+    [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background-color: #0d122e;
+      color: #e2e8f0;
+      border: 1px solid rgba(134, 9, 251, 0.6);
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      border-radius: 8px;
+      white-space: normal;
+      width: max-content;
+      max-width: 250px;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+      z-index: 100;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    [data-tip]:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .tip-right::after {
+      left: auto;
+      right: 0;
+      transform: translateY(4px);
+    }
+    .tip-right:hover::after {
+      transform: translateY(0);
+    }
+
+    .info-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(119, 1, 228, 0.12);
+      border: 1px solid rgba(119, 1, 228, 0.35);
+      color: #8609fb;
+      font-size: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: 5px;
+      cursor: help;
+      vertical-align: middle;
+    }
+    .dark .info-dot {
+      color: #c084fc;
+      border-color: rgba(134, 9, 251, 0.5);
+    }
+
+    /* Drag & Drop Visual Styles */
+    .tree-row-item {
+      cursor: grab;
+      border: 1px dashed transparent;
+      transition: background 0.1s ease, border-color 0.15s ease;
+    }
+    .tree-row-item:active {
+      cursor: grabbing;
+    }
+    .tree-row-item.drag-over-active {
+      border-color: #8609fb !important;
+      background: rgba(134, 9, 251, 0.12) !important;
+    }
+    .drag-handle-dots {
+      opacity: 0.35;
+      cursor: grab;
+      user-select: none;
+      transition: opacity 0.15s ease, color 0.15s ease;
+    }
+    .tree-row-item:hover .drag-handle-dots {
+      opacity: 0.9;
+      color: #8609fb;
+    }
+    .folder-name-tag {
+      cursor: pointer;
+      border: 1px solid transparent;
+      padding: 1px 4px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    .folder-name-tag:hover {
+      background: rgba(119, 1, 228, 0.1);
+      border-color: rgba(134, 9, 251, 0.4);
+    }
+    .folder-rename-input {
+      background: #FFFFFF;
+      border: 1px solid #7701e4;
+      color: #7701e4;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      outline: none;
+      width: 175px;
+    }
+    .dark .folder-rename-input {
+      background: #070a1c;
+      border-color: #8609fb;
+      color: #c084fc;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #070a1c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2b1f55;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8609fb;
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] dark:text-slate-100 min-h-screen flex flex-col justify-between selection:bg-[#7701e4] selection:text-white antialiased transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/70 dark:border-purple-900/40 bg-white/80 dark:bg-[#070b1e]/85 backdrop-blur-md px-4 sm:px-6 py-4 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="https://xentro-tools.vercel.app/" target="_self" class="flex items-center gap-3.5 select-none group">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-600/30 group-hover:scale-105 transition duration-300" data-tip="Xentro Studios Production Suite">
+          X
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">Xentro</span>
+            <span class="text-xl font-extrabold tracking-tight text-[#8609fb]">Studios</span>
+          </div>
+          <span class="text-xs font-semibold text-[#64748B] dark:text-slate-400 tracking-tight mt-1">Create your own dreams</span>
+        </div>
+      </a>
+
+      <!-- Header Controls: Back to Tools + Day/Night Toggle -->
+      <div class="flex items-center gap-3.5">
+        <a href="https://xentro-tools.vercel.app/" target="_self" class="group flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#131a42] border border-slate-200/90 dark:border-purple-800/60 shadow-sm hover:border-[#7701e4] dark:hover:border-[#8609fb] hover:shadow-md transition-all duration-200">
+          <span class="w-5 h-5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-purple-300 group-hover:bg-[#7701e4] group-hover:text-white flex items-center justify-center transition-colors">
+            <svg class="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-[#c084fc] transition-colors">Back to Tools</span>
+        </a>
+
+        <!-- Animated Day/Night Pill Switcher -->
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <div class="sky-bg"><div class="clouds"></div></div>
+          <div class="night-bg"><div class="stars">✦</div></div>
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Header Block -->
+  <section class="max-w-4xl w-full mx-auto text-center px-4 mt-8 mb-8">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 dark:bg-[#131a42] backdrop-blur border border-purple-100 dark:border-purple-700/60 text-[#7701e4] dark:text-purple-300 text-xs font-bold shadow-sm mb-3">
+      <span class="w-2 h-2 rounded-full bg-[#8609fb] animate-pulse"></span>
+      ORGANIZATION
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+      Project Structure & Asset Naming
+    </h1>
+    <p class="text-xs sm:text-sm text-[#64748B] dark:text-slate-300 mt-2 max-w-2xl mx-auto font-medium">
+      Generate standardized post-production folder trees and bulletproof render file names.
+    </p>
+  </section>
+
+  <!-- 2-Column Exact Layout -->
+  <main class="max-w-7xl w-full mx-auto px-4 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
+
+    <!-- ==================== LEFT COLUMN: PROJECT FOLDER TREE ==================== -->
+    <div class="lg:col-span-6 outer-card p-4 sm:p-5">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-purple-100 dark:border-purple-800/60">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm flex items-center">
+              PROJECT FOLDER TREE
+              <span class="info-dot">ⓘ</span>
+            </span>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono-code mt-1.5 px-1 font-bold" id="lblFolderCountReady">10 Folders Ready</p>
+          </div>
+          
+          <div data-tip="Switch pipeline structure for your specific media discipline">
+            <select id="pipelinePresetSelect" onchange="onPresetChange(this.value)" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-purple-200 dark:border-purple-800/80 shadow-sm outline-none cursor-pointer focus:border-[#8609fb]">
+              <option value="mograph" selected>Motion Graphics & 3D</option>
+              <option value="commercial">Commercial / Agency</option>
+              <option value="creator">Social / Creator</option>
+              <option value="custom">Custom Clean Tree</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- First Row: Inputs -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+          
+          <!-- Root Project Folder -->
+          <div class="sm:col-span-5 space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Master top-level directory name for this project">
+              Root Project Folder
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <input type="text" id="rootProjectInput" value="PRJ_BrandCampaign_2026" oninput="renderFolderTree()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-3 text-[#7701e4] dark:text-[#c084fc] font-mono-code text-xs font-bold outline-none shadow-sm" />
+          </div>
+
+          <!-- Add New Subfolder Path -->
+          <div class="sm:col-span-7 space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Type path to nest folders (e.g. 05_DOCS/Briefs)">
+              Add New Subfolder Path
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <div class="flex gap-1.5">
+              <input type="text" id="customPathInput" placeholder="05_DOCS/Briefs" onkeydown="if(event.key==='Enter') addCustomPath()" class="flex-1 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-3 text-slate-800 dark:text-slate-100 font-mono-code text-xs outline-none shadow-sm" />
+              <button type="button" onclick="addCustomPath()" class="px-3.5 py-2 btn-gradient text-white font-bold rounded-xl text-xs shadow-md transition shrink-0 cursor-pointer" data-tip="Add to directory tree">
+                + Add
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Directory Hierarchy Container -->
+        <div class="space-y-1.5 pt-1">
+          <div class="flex items-center justify-between text-[11px] font-mono-code text-slate-500 dark:text-slate-400 px-1">
+            <span class="flex items-center font-bold" data-tip="Drag handles to reorder, click text to edit, and click ✕ to delete.">
+              DIRECTORY HIERARCHY
+              <span class="info-dot">ⓘ</span>
+            </span>
+            <button type="button" onclick="resetPreset()" class="text-[#7701e4] dark:text-purple-400 hover:underline font-bold transition cursor-pointer text-[10px]" data-tip="Restore default folders for this preset">
+              Reset Preset
+            </button>
+          </div>
+
+          <!-- Interactive Tree Map -->
+          <div id="treeDisplayBox" class="p-3.5 bg-white dark:bg-[#070a1c] rounded-2xl border border-purple-200/80 dark:border-purple-800/70 max-h-[300px] overflow-y-auto space-y-1 font-mono-code text-xs shadow-inner">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Bottom Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-purple-100 dark:border-purple-800/60">
+          <button type="button" id="btnDownloadTreeZip" onclick="downloadProjectZip()" class="py-2.5 px-4 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer" data-tip="Downloads zip archive with .gitkeep placeholders to prevent empty folder collapse">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span id="txtDownloadZip">Download Folder Tree (.ZIP)</span>
+          </button>
+
+          <button type="button" onclick="copyDirectoryTreeText()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm" data-tip="Copies ASCII formatted directory tree for project briefs and Slack channels">
+            <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="lblCopyTreeText">Copy Tree Paths</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== RIGHT COLUMN: ASSET & RENDER NAMING ==================== -->
+    <div class="lg:col-span-6 outer-card p-4 sm:p-5">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-purple-100 dark:border-purple-800/60">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm flex items-center">
+              ASSET & RENDER NAMING
+              <span class="info-dot">ⓘ</span>
+            </span>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono-code mt-1.5 px-1 font-bold">Industry Tokenized Formula</p>
+          </div>
+
+          <!-- Software Badges (Strict Brand Purples) -->
+          <div class="flex items-center gap-1.5">
+            <div class="tip-right" data-tip="Premiere Pro: Click the File Name field in Export Queue to paste token.">
+              <button type="button" class="py-1 px-2.5 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 text-[#7701e4] dark:text-purple-300 text-[10px] font-bold rounded-lg flex items-center gap-1.5 shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#7701e4]"></span>
+                <span>PR ⓘ</span>
+              </button>
+            </div>
+
+            <div class="tip-right" data-tip="DaVinci Resolve: In Deliver Page under File Custom Name, paste token.">
+              <button type="button" class="py-1 px-2.5 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 text-[#8609fb] dark:text-purple-300 text-[10px] font-bold rounded-lg flex items-center gap-1.5 shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8609fb]"></span>
+                <span>Resolve ⓘ</span>
+              </button>
+            </div>
+
+            <div class="tip-right" data-tip="After Effects: Render Queue > Output To > Custom Template.">
+              <button type="button" class="py-1 px-2.5 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 text-[#c084fc] dark:text-[#c084fc] text-[10px] font-bold rounded-lg flex items-center gap-1.5 shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc]"></span>
+                <span>AE ⓘ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Column Token Grid -->
+        <div class="grid grid-cols-3 gap-2.5 text-xs">
+          
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="3-4 letter uppercase client/brand identifier">
+              Client Prefix
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <input type="text" id="fnClientPrefix" value="XEN" oninput="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2.5 text-[#0F172A] dark:text-white font-mono-code text-xs uppercase outline-none font-bold shadow-sm" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="PascalCase project/campaign name without spaces">
+              Project Title
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <input type="text" id="fnProjectTitle" value="LaunchPromo" oninput="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2.5 text-[#0F172A] dark:text-white font-mono-code text-xs outline-none font-bold shadow-sm" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Specifies aspect ratio or delivery cut">
+              Deliverable
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <select id="fnDeliverableCut" onchange="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2 text-[#0F172A] dark:text-white text-xs outline-none cursor-pointer font-bold shadow-sm">
+              <option value="Reel_9x16" selected>Reel (9:16)</option>
+              <option value="Story_9x16">Story (9:16)</option>
+              <option value="Master_16x9">Master (16:9)</option>
+              <option value="Cutdown_30s">Cutdown (30s)</option>
+              <option value="Cutdown_15s">Cutdown (15s)</option>
+              <option value="Teaser">Teaser</option>
+              <option value="CleanMaster">CleanMaster</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Strict version milestone">
+              Version
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <select id="fnVersionTag" onchange="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2 text-[#0F172A] dark:text-white text-xs outline-none cursor-pointer font-bold shadow-sm">
+              <option value="v01" selected>v01</option>
+              <option value="v02">v02</option>
+              <option value="v03">v03</option>
+              <option value="RC1">RC1</option>
+              <option value="FINAL_MASTER">FINAL</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Chronological sort stamp">
+              Date Stamp
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <select id="fnDateStampMode" onchange="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2 text-[#0F172A] dark:text-white text-xs outline-none cursor-pointer font-mono-code font-bold shadow-sm">
+              <option value="yymmdd" selected>YYMMDD</option>
+              <option value="yyyymmdd">YYYYMMDD</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Compression and resolution spec">
+              Codec / Spec
+              <span class="info-dot">ⓘ</span>
+            </label>
+            <select id="fnCodecSpec" onchange="updateRenderNamePreview()" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl py-2 px-2 text-[#0F172A] dark:text-white text-xs outline-none cursor-pointer font-bold shadow-sm">
+              <option value="4K_H265" selected>4K H.265</option>
+              <option value="1080p_H264">1080p H.264</option>
+              <option value="4K_ProRes422">4K ProRes 422</option>
+              <option value="ProRes4444_Alpha">ProRes 4444 α</option>
+              <option value="DNxHR_HQ">DNxHR HQ</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- File Format Selector -->
+        <div class="flex items-center justify-between text-xs pt-1">
+          <span class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300 flex items-center" data-tip="Select export media container or project file extension">
+            File Format:
+            <span class="info-dot">ⓘ</span>
+          </span>
+          <div class="flex items-center gap-1 bg-white dark:bg-[#070a1c] p-1 rounded-xl border border-purple-200 dark:border-purple-800/80 font-mono-code font-bold shadow-sm">
+            <button type="button" id="extBtn_mp4" onclick="selectExtension('.mp4')" class="px-2.5 py-1 rounded-lg btn-gradient text-white transition text-xs cursor-pointer">.mp4</button>
+            <button type="button" id="extBtn_mov" onclick="selectExtension('.mov')" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">.mov</button>
+            <button type="button" id="extBtn_prproj" onclick="selectExtension('.prproj')" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">.prproj</button>
+            <button type="button" id="extBtn_aep" onclick="selectExtension('.aep')" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">.aep</button>
+            <button type="button" id="extBtn_drp" onclick="selectExtension('.drp')" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">.drp</button>
+          </div>
+        </div>
+
+        <!-- Real-Time Glowing Brand Preview Box -->
+        <div class="p-4 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 rounded-2xl shadow-lg shadow-purple-600/10 space-y-1.5" data-tip="The standardized render name ready to paste into your NLE">
+          <div class="flex items-center justify-between text-[10px] font-mono-code uppercase tracking-wider font-bold">
+            <span class="text-slate-400 dark:text-slate-400">RENDER NAME PREVIEW</span>
+            <span class="text-[#7701e4] dark:text-[#c084fc]">READY TO RENDER</span>
+          </div>
+          <div id="renderStringDisplay" class="font-mono-code text-[#7701e4] dark:text-[#c084fc] font-bold text-sm sm:text-base break-all select-all leading-tight">
+            XEN_LaunchPromo_Reel_9x16_v01_261111_4K_H265.mp4
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+          <button type="button" onclick="copyRenderFilename()" class="py-2.5 px-4 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer" data-tip="Copies this filename string directly to clipboard">
+            <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="lblCopyFilenameBtn">Copy File Name</span>
+          </button>
+
+          <button type="button" onclick="toggleBatchSection()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm" data-tip="Toggle sequential version list (v01 - v05)">
+            <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+            <span id="lblBatchToggleText">Batch (v01 - v05)</span>
+          </button>
+        </div>
+
+        <!-- Batch Sequence List Card -->
+        <div id="batchSequenceCard" class="p-3.5 bg-white dark:bg-[#070a1c] rounded-2xl space-y-2 border border-purple-200/80 dark:border-purple-800/80 shadow-inner">
+          <div class="flex items-center justify-between text-xs font-mono-code pb-1 border-b border-purple-100 dark:border-purple-800/60">
+            <span class="text-slate-700 dark:text-slate-300 font-bold flex items-center" data-tip="Sequential filenames ready for client delivery logs or render queues">
+              Batch Version Sequence
+              <span class="info-dot">ⓘ</span>
+            </span>
+            <button type="button" onclick="copyAllBatchVersions()" class="text-[#7701e4] dark:text-[#c084fc] hover:underline font-bold text-[11px] cursor-pointer" data-tip="Copy all 5 version names to clipboard">
+              Copy All 5
+            </button>
+          </div>
+          <div id="batchVersionList" class="space-y-1.5 font-mono-code text-[11px] text-slate-700 dark:text-slate-300 max-h-[175px] overflow-y-auto pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Community Callout -->
+  <footer class="max-w-7xl w-full mx-auto px-4 pb-8">
+    <div class="outer-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-purple-500/20">
+          X
+        </div>
+        <div>
+          <h4 class="text-xs font-extrabold text-[#0F172A] dark:text-white">Xentro Editor Council</h4>
+          <p class="text-[11px] text-[#64748B] dark:text-slate-400 font-medium">Join 500+ video editors sharing motion presets, project critiques, and freelance tips.</p>
+        </div>
+      </div>
+
+      <a href="https://chat.whatsapp.com/JRh8GHhmmwk9DzIK13NjHy" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-5 py-2.5 btn-gradient text-white font-bold text-xs rounded-xl shadow-md transition text-center shrink-0">
+        Join Free Community &rarr;
+      </a>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Box -->
+  <div id="toastBox" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-white/95 dark:bg-[#0d122e] backdrop-blur-md border border-purple-100 dark:border-purple-700/60 text-[#0F172A] dark:text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb]"></span>
+    <span id="toastMsg">Action complete</span>
+  </div>
+
+  <!-- Functional Engine Script (Protected & Tested) -->
+  <script>
+    const pipelineTemplates = {
+      mograph: [
+        "01_BOARDS_STYLEFRAMES",
+        "01_BOARDS_STYLEFRAMES/Models",
+        "01_BOARDS_STYLEFRAMES/Textures",
+        "02_PROJECTS/Editing",
+        "02_PROJECTS/Animation",
+        "02_PROJECTS/VFX_Compositing",
+        "04_RENDERS/Passes",
+        "04_RENDERS/Previews",
+        "05_EXPORTS/Work_In_Progress",
+        "05_EXPORTS/FINAL_DELIVERY"
+      ],
+      commercial: [
+        "01_FOOTAGE/Raw_Camera",
+        "01_FOOTAGE/Drone_B-Roll",
+        "02_PROJECTS/Editing",
+        "02_PROJECTS/Animation",
+        "02_PROJECTS/VFX",
+        "03_ASSETS/Audio/Music",
+        "03_ASSETS/Audio/SFX",
+        "03_ASSETS/Graphics/Logos",
+        "04_EXPORTS/Work_In_Progress",
+        "04_EXPORTS/FINAL_DELIVERY",
+        "05_DOCS/Briefs"
+      ],
+      creator: [
+        "01_RAW_CLIPS",
+        "02_A_ROLL",
+        "03_B_ROLL",
+        "04_AUDIO_SFX",
+        "05_PROJECTS/Editing",
+        "05_PROJECTS/Animation",
+        "06_EXPORTS/Work_In_Progress",
+        "06_EXPORTS/FINAL_DELIVERY"
+      ],
+      custom: [
+        "01_FOOTAGE",
+        "02_PROJECTS/Editing",
+        "02_PROJECTS/Animation",
+        "03_ASSETS",
+        "04_EXPORTS/Work_In_Progress",
+        "04_EXPORTS/FINAL_DELIVERY"
+      ]
+    };
+
+    let activeFolderPaths = [...pipelineTemplates.mograph];
+    let currentExt = '.mp4';
+    let editingIndex = -1;
+    let draggedIndex = null;
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('xentro_theme', isDark ? 'dark' : 'light');
+      showToast(isDark ? 'Dark theme enabled' : 'Light theme enabled');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastBox');
+      const msgSpan = document.getElementById('toastMsg');
+      msgSpan.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2100);
+    }
+
+    function copyToClipboard(text, message) {
+      const tempArea = document.createElement('textarea');
+      tempArea.value = text;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempArea);
+      showToast(message);
+    }
+
+    // ==================== LEFT: FOLDER TREE SYSTEM ====================
+    function onPresetChange(presetKey) {
+      if (pipelineTemplates[presetKey]) {
+        activeFolderPaths = [...pipelineTemplates[presetKey]];
+        editingIndex = -1;
+        renderFolderTree();
+        showToast(`Loaded ${presetKey} preset`);
+      }
+    }
+
+    function resetPreset() {
+      const selected = document.getElementById('pipelinePresetSelect').value;
+      activeFolderPaths = [...(pipelineTemplates[selected] || pipelineTemplates.mograph)];
+      editingIndex = -1;
+      renderFolderTree();
+      showToast('Preset reset to defaults');
+    }
+
+    function addCustomPath() {
+      const input = document.getElementById('customPathInput');
+      const raw = input.value.trim().replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+      if (!raw) return;
+      if (!activeFolderPaths.includes(raw)) {
+        activeFolderPaths.push(raw);
+        input.value = '';
+        renderFolderTree();
+        showToast('Subfolder added');
+      } else {
+        showToast('Path already exists');
+      }
+    }
+
+    function deleteFolderBranch(path) {
+      activeFolderPaths = activeFolderPaths.filter(p => p !== path);
+      if (editingIndex !== -1) editingIndex = -1;
+      renderFolderTree();
+      showToast('Folder deleted');
+    }
+
+    window.startFolderRename = function(idx) {
+      editingIndex = idx;
+      renderFolderTree();
+    };
+
+    window.cancelFolderRename = function() {
+      editingIndex = -1;
+      renderFolderTree();
+    };
+
+    window.saveFolderRename = function(idx) {
+      const inputEl = document.getElementById('inlineRenameInput');
+      if (inputEl) {
+        const newName = inputEl.value.trim();
+        if (newName) {
+          const parts = activeFolderPaths[idx].split('/');
+          parts[parts.length - 1] = newName;
+          activeFolderPaths[idx] = parts.join('/');
+          editingIndex = -1;
+          renderFolderTree();
+          showToast('Folder renamed');
+        }
+      }
+    };
+
+    function renderFolderTree() {
+      const root = document.getElementById('rootProjectInput').value.trim() || 'PROJECT_ROOT';
+      const container = document.getElementById('treeDisplayBox');
+      container.innerHTML = '';
+
+      document.getElementById('lblFolderCountReady').textContent = `${activeFolderPaths.length} Folders Ready`;
+
+      // Root item
+      const rootRow = document.createElement('div');
+      rootRow.className = 'flex items-center gap-2 text-[#7701e4] dark:text-[#c084fc] font-bold pb-2 mb-1 border-b border-purple-100 dark:border-purple-800/60';
+      rootRow.innerHTML = `
+        <svg class="w-4 h-4 shrink-0 fill-current" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+        <span>${escapeHtml(root)}/</span>
+      `;
+      container.appendChild(rootRow);
+
+      // Child items
+      activeFolderPaths.forEach((path, index) => {
+        const parts = path.split('/');
+        const depth = parts.length;
+        const leafName = parts[parts.length - 1];
+        const indentPx = (depth - 1) * 14 + 4;
+
+        const row = document.createElement('div');
+        row.className = 'group tree-row-item flex items-center justify-between py-1 px-1.5 rounded hover:bg-purple-50 dark:hover:bg-[#131a42]';
+        row.style.paddingLeft = `${indentPx}px`;
+        row.draggable = editingIndex === -1;
+        row.dataset.index = index;
+
+        if (editingIndex === index) {
+          row.innerHTML = `
+            <div class="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 flex-1">
+              <span class="text-slate-400 dark:text-slate-500">└─</span>
+              <svg class="w-3.5 h-3.5 text-[#8609fb] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <input type="text" id="inlineRenameInput" class="folder-rename-input" value="${escapeHtml(leafName)}">
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="saveFolderRename(${index})" class="text-[#7701e4] dark:text-[#c084fc] hover:text-white px-2 py-0.5 text-[10px] font-bold rounded bg-purple-50 dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800 transition" title="Save changes">✓</button>
+              <button type="button" onclick="cancelFolderRename()" class="text-slate-400 hover:text-white px-2 py-0.5 text-[10px] font-bold rounded bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 transition" title="Cancel">✕</button>
+            </div>
+          `;
+        } else {
+          row.innerHTML = `
+            <div class="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 flex-1 overflow-hidden">
+              <span class="drag-handle-dots text-[10px] font-mono" title="Drag to reorder position">⋮⋮</span>
+              <span class="text-slate-400 dark:text-slate-500">└─</span>
+              <svg class="w-3.5 h-3.5 text-[#8609fb] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <span class="folder-name-tag text-xs truncate font-medium" onclick="startFolderRename(${index})" title="Click to rename folder">${escapeHtml(leafName)}</span>
+            </div>
+            <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+              <button type="button" onclick="startFolderRename(${index})" class="text-[#7701e4] dark:text-purple-300 text-[11px] px-1 transition" title="Rename folder">✎</button>
+              <button type="button" onclick="deleteFolderBranch('${escapeQuotes(path)}')" class="text-slate-400 hover:text-rose-500 text-[10px] px-1 transition" title="Delete folder branch">✕</button>
+            </div>
+          `;
+        }
+
+        row.addEventListener('dragstart', (e) => {
+          draggedIndex = index;
+          e.dataTransfer.effectAllowed = 'move';
+          row.style.opacity = '0.35';
+        });
+
+        row.addEventListener('dragend', () => {
+          row.style.opacity = '1';
+          draggedIndex = null;
+          document.querySelectorAll('.tree-row-item').forEach(el => el.classList.remove('drag-over-active'));
+        });
+
+        row.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          row.classList.add('drag-over-active');
+        });
+
+        row.addEventListener('dragleave', () => {
+          row.classList.remove('drag-over-active');
+        });
+
+        row.addEventListener('drop', (e) => {
+          e.preventDefault();
+          row.classList.remove('drag-over-active');
+          if (draggedIndex !== null && draggedIndex !== index) {
+            const movedItem = activeFolderPaths.splice(draggedIndex, 1)[0];
+            activeFolderPaths.splice(index, 0, movedItem);
+            renderFolderTree();
+            showToast('Folder order reordered');
+          }
+        });
+
+        container.appendChild(row);
+      });
+
+      if (editingIndex !== -1) {
+        const inputField = document.getElementById('inlineRenameInput');
+        if (inputField) {
+          inputField.focus();
+          inputField.select();
+          inputField.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveFolderRename(editingIndex);
+            if (e.key === 'Escape') cancelFolderRename();
+          });
+        }
+      }
+    }
+
+    function copyDirectoryTreeText() {
+      const root = document.getElementById('rootProjectInput').value.trim() || 'PROJECT_ROOT';
+      const lines = [`📁 ${root}/`];
+      activeFolderPaths.forEach(p => {
+        const depth = p.split('/').length;
+        const indent = '  '.repeat(depth);
+        const name = p.split('/').pop();
+        lines.push(`${indent}└── 📁 ${name}`);
+      });
+      copyToClipboard(lines.join('\n'), 'Tree paths copied to clipboard');
+      const lbl = document.getElementById('lblCopyTreeText');
+      lbl.textContent = 'Copied!';
+      setTimeout(() => { lbl.textContent = 'Copy Tree Paths'; }, 2000);
+    }
+
+    async function downloadProjectZip() {
+      if (typeof JSZip === 'undefined') {
+        showToast('Error: JSZip library failed to load');
+        return;
+      }
+
+      const zip = new JSZip();
+      const root = document.getElementById('rootProjectInput').value.trim() || 'PROJECT_ROOT';
+      const rootFolder = zip.folder(root);
+
+      activeFolderPaths.forEach(path => {
+        rootFolder.file(`${path}/.gitkeep`, '# Standard placeholder to retain empty folder\n');
+      });
+
+      const manifestContent = `Project: ${root}\nStandard: Xentro Universal Pipeline\nGenerated: ${new Date().toISOString()}\nWebsite: https://xentro.studio\n`;
+      rootFolder.file('PROJECT_MANIFEST.txt', manifestContent);
+
+      const btnText = document.getElementById('txtDownloadZip');
+      btnText.textContent = 'Zipping...';
+
+      try {
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${root}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Project folder .ZIP downloaded');
+      } catch (err) {
+        showToast('Failed to create .zip archive');
+      } finally {
+        btnText.textContent = 'Download Folder Tree (.ZIP)';
+      }
+    }
+
+    // ==================== RIGHT: ASSET & RENDER NAMING ====================
+    function selectExtension(ext) {
+      currentExt = ext;
+      const exts = ['.mp4', '.mov', '.prproj', '.aep', '.drp'];
+      exts.forEach(e => {
+        const id = 'extBtn_' + e.replace('.', '');
+        const btn = document.getElementById(id);
+        if (btn) {
+          if (e === ext) {
+            btn.className = 'px-2.5 py-1 rounded-lg btn-gradient text-white transition text-xs cursor-pointer';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer';
+          }
+        }
+      });
+      updateRenderNamePreview();
+    }
+
+    function getFormattedDate(mode) {
+      if (mode === 'none') return '';
+      const now = new Date();
+      const yFull = String(now.getFullYear());
+      const yShort = yFull.slice(-2);
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      if (mode === 'yymmdd') return `${yShort}${m}${d}`;
+      if (mode === 'yyyymmdd') return `${yFull}${m}${d}`;
+      return '';
+    }
+
+    function buildRenderFilename(customVersion = null) {
+      const client = (document.getElementById('fnClientPrefix').value.trim() || 'CLIENT').replace(/[^a-zA-Z0-9_-]/g, '');
+      const project = (document.getElementById('fnProjectTitle').value.trim() || 'PROJECT').replace(/[^a-zA-Z0-9_-]/g, '');
+      const deliverable = document.getElementById('fnDeliverableCut').value;
+      const version = customVersion || document.getElementById('fnVersionTag').value;
+      const dateMode = document.getElementById('fnDateStampMode').value;
+      const dateStr = getFormattedDate(dateMode);
+      const codec = document.getElementById('fnCodecSpec').value;
+
+      const tokens = [client, project, deliverable, version];
+      if (dateStr) tokens.push(dateStr);
+      tokens.push(codec);
+
+      return `${tokens.join('_')}${currentExt}`;
+    }
+
+    function updateRenderNamePreview() {
+      const fname = buildRenderFilename();
+      document.getElementById('renderStringDisplay').textContent = fname;
+      renderBatchSequenceList();
+    }
+
+    function copyRenderFilename() {
+      const fname = buildRenderFilename();
+      copyToClipboard(fname, 'Render filename copied');
+      const lbl = document.getElementById('lblCopyFilenameBtn');
+      lbl.textContent = 'Copied!';
+      setTimeout(() => { lbl.textContent = 'Copy File Name'; }, 2000);
+    }
+
+    function toggleBatchSection() {
+      const card = document.getElementById('batchSequenceCard');
+      const isVisible = !card.classList.contains('hidden');
+      if (isVisible) {
+        card.classList.add('hidden');
+        document.getElementById('lblBatchToggleText').textContent = 'Batch (v01 - v05)';
+      } else {
+        card.classList.remove('hidden');
+        document.getElementById('lblBatchToggleText').textContent = 'Hide Batch';
+      }
+    }
+
+    function renderBatchSequenceList() {
+      const list = document.getElementById('batchVersionList');
+      list.innerHTML = '';
+      const versions = ['v01', 'v02', 'v03', 'v04', 'v05'];
+
+      versions.forEach(v => {
+        const item = document.createElement('div');
+        const fname = buildRenderFilename(v);
+        item.className = 'flex items-center justify-between p-2 rounded-xl bg-purple-50/60 dark:bg-[#131a42] hover:bg-purple-100/70 dark:hover:bg-[#182054] border border-purple-200/70 dark:border-purple-800/60 transition';
+        item.innerHTML = `
+          <span class="break-all text-xs text-slate-800 dark:text-slate-200 font-mono-code font-medium">${escapeHtml(fname)}</span>
+          <button type="button" onclick="copyToClipboard('${escapeQuotes(fname)}', 'Copied ${v}')" class="text-[#7701e4] dark:text-[#c084fc] hover:text-white px-2.5 py-0.5 text-[10px] font-bold rounded-lg bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 hover:bg-[#7701e4] dark:hover:bg-[#8609fb] transition shrink-0 ml-2 cursor-pointer shadow-sm" data-tip="Copy ${v} filename">
+            Copy
+          </button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function copyAllBatchVersions() {
+      const versions = ['v01', 'v02', 'v03', 'v04', 'v05'];
+      const batchText = versions.map(v => buildRenderFilename(v)).join('\n');
+      copyToClipboard(batchText, 'Copied all 5 batch version filenames');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escapeQuotes(str) {
+      return String(str).replace(/'/g, "\\'");
+    }
+
+    // Initialize on page load
+    renderFolderTree();
+    updateRenderNamePreview();
+  </script>
+</body>
+</html>

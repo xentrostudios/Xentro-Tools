@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script Word Counter & Voiceover Estimator | Xentro Studios</title>
+
+  <!-- Instant Theme Script to Prevent Flash -->
+  <script>
+    if (localStorage.getItem('xentro_theme') === 'dark' || 
+       (!localStorage.getItem('xentro_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Background Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.10) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.05) 0px, transparent 45%);
+    }
+    .dark .draftr-bg {
+      background-color: #03050c;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.22) 0px, transparent 60%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.14) 0px, transparent 45%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.12) 0px, transparent 50%);
+    }
+
+    /* Outer Wrapper Card with Distinct Purple Separation */
+    .outer-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(119, 1, 228, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      border-radius: 28px;
+      transition: all 0.25s ease;
+    }
+    .dark .outer-card {
+      background: #0d122e;
+      border: 1px solid rgba(119, 1, 228, 0.38);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 22px 0 rgba(119, 1, 228, 0.18);
+    }
+    .outer-card:hover {
+      border-color: rgba(216, 180, 254, 0.9);
+      box-shadow: 0 14px 30px -4px rgba(119, 1, 228, 0.08);
+    }
+    .dark .outer-card:hover {
+      border-color: rgba(134, 9, 251, 0.65);
+      box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75), 0 0 30px 2px rgba(134, 9, 251, 0.28);
+    }
+
+    /* Primary Brand Gradient Buttons (#7701e4 to #8609fb) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7701e4 0%, #8609fb 100%);
+      box-shadow: 0 4px 14px 0 rgba(119, 1, 228, 0.35);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #6400c2 0%, #7701e4 100%);
+      box-shadow: 0 6px 22px 0 rgba(134, 9, 251, 0.5);
+    }
+
+    /* Range Sliders */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #8609fb;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(134, 9, 251, 0.7);
+    }
+
+    /* Animated Day/Night Pill Switcher */
+    .theme-toggle-btn {
+      position: relative;
+      width: 68px;
+      height: 32px;
+      border-radius: 9999px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .theme-toggle-btn .sky-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #93c5fd 100%);
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .clouds {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      width: 32px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+    .theme-toggle-btn .clouds::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .theme-toggle-btn .night-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #090d24 0%, #171d3d 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .stars {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-size: 8px;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 12px 6px 0px #fff, 6px 12px 0px #fff;
+    }
+    .theme-toggle-btn .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .dark .theme-toggle-btn {
+      border-color: rgba(119, 1, 228, 0.4);
+    }
+    .dark .theme-toggle-btn .sky-bg {
+      opacity: 0;
+    }
+    .dark .theme-toggle-btn .night-bg {
+      opacity: 1;
+    }
+    .dark .theme-toggle-btn .toggle-thumb {
+      transform: translateX(36px);
+      background: #cbd5e1;
+      box-shadow: inset -2px -2px 0 0 #94a3b8, 0 0 8px rgba(203, 213, 225, 0.4);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #070a1c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2b1f55;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8609fb;
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] dark:text-slate-100 min-h-screen flex flex-col justify-between selection:bg-[#7701e4] selection:text-white antialiased transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/70 dark:border-purple-900/40 bg-white/80 dark:bg-[#070b1e]/85 backdrop-blur-md px-4 sm:px-6 py-4 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+    <div class="max-w-[1440px] mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="https://xentro-tools.vercel.app/" target="_self" class="flex items-center gap-3.5 select-none group">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-600/30 group-hover:scale-105 transition duration-300">
+          X
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">Xentro</span>
+            <span class="text-xl font-extrabold tracking-tight text-[#8609fb]">Studios</span>
+          </div>
+          <span class="text-xs font-semibold text-[#64748B] dark:text-slate-400 tracking-tight mt-1">Create your own dreams</span>
+        </div>
+      </a>
+
+      <!-- Header Controls: Actions + Back to Tools + Day/Night Toggle -->
+      <div class="flex items-center gap-3">
+        <button onclick="loadSample()" class="px-3.5 py-1.5 rounded-xl bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-xs font-bold text-slate-700 dark:text-slate-200 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Sample</span>
+        </button>
+
+        <button onclick="clearText()" class="px-3 py-1.5 rounded-xl bg-purple-50 dark:bg-[#070a1c] hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-purple-200 dark:border-purple-800/80 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <span>Clear</span>
+        </button>
+
+        <a href="https://xentro-tools.vercel.app/" target="_self" class="group flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#131a42] border border-slate-200/90 dark:border-purple-800/60 shadow-sm hover:border-[#7701e4] dark:hover:border-[#8609fb] hover:shadow-md transition-all duration-200">
+          <span class="w-5 h-5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-purple-300 group-hover:bg-[#7701e4] group-hover:text-white flex items-center justify-center transition-colors">
+            <svg class="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-[#c084fc] transition-colors">Back to Tools</span>
+        </a>
+
+        <!-- Animated Day/Night Pill Switcher -->
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <div class="sky-bg"><div class="clouds"></div></div>
+          <div class="night-bg"><div class="stars">✦</div></div>
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 py-8 w-full flex-1">
+    
+    <!-- Title Area & Target Fit Badge -->
+    <div class="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2.5">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#7701e4] dark:text-purple-300 bg-purple-50 dark:bg-[#131a42] px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800/80 shadow-sm">
+            VOICEOVER & PACING ENGINE
+          </span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold">100% In-Browser Privacy</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">
+          Script Word Counter & Voiceover Estimator
+        </h1>
+        <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm mt-1.5 font-medium">
+          Calculate exact script runtimes, optimize speech pacing for reels vs longform, and detect repetitive phrasing.
+        </p>
+      </div>
+
+      <!-- Target Fit Badge (Strict Brand Purple) -->
+      <div id="target-fit-badge" class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 text-[#7701e4] dark:text-[#c084fc] text-xs font-bold whitespace-nowrap self-start lg:self-end shadow-sm">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb] animate-pulse"></span>
+        <span id="target-fit-text">Target Fit: Full YouTube Short / Ad Spot (30s - 60s)</span>
+      </div>
+    </div>
+
+    <!-- 6 KPI Top Metric Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-7">
+      
+      <!-- Words -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">WORDS</div>
+        <div class="text-3xl font-black text-[#0F172A] dark:text-white mt-1.5 font-mono-code" id="stat-words">0</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">tokens parsed</div>
+      </div>
+
+      <!-- Characters -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">CHARACTERS</div>
+        <div class="text-3xl font-black text-[#7701e4] dark:text-[#c084fc] mt-1.5 font-mono-code" id="stat-chars">0</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1"><span id="stat-chars-nospace" class="font-bold">0</span> no spaces</div>
+      </div>
+
+      <!-- Estimated VO Time -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">ESTIMATED VO TIME</div>
+        <div class="text-3xl font-black text-[#8609fb] dark:text-[#d8b4fe] mt-1.5 font-mono-code" id="stat-vo-time">00:00</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1 font-mono-code" id="stat-vo-label">at 140 WPM</div>
+      </div>
+
+      <!-- Silent Reading -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">SILENT READING</div>
+        <div class="text-3xl font-black text-[#0F172A] dark:text-white mt-1.5 font-mono-code" id="stat-reading-time">00:00</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">at 220 WPM</div>
+      </div>
+
+      <!-- Sentences -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">SENTENCES</div>
+        <div class="text-3xl font-black text-[#0F172A] dark:text-white mt-1.5 font-mono-code" id="stat-sentences">0</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1"><span id="stat-avg-words" class="font-bold">0</span> w/sent avg</div>
+      </div>
+
+      <!-- Paragraphs -->
+      <div class="outer-card p-4">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">PARAGRAPHS</div>
+        <div class="text-3xl font-black text-[#0F172A] dark:text-white mt-1.5 font-mono-code" id="stat-paragraphs">0</div>
+        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1"><span id="stat-lines" class="font-bold">0</span> lines</div>
+      </div>
+
+    </div>
+
+    <!-- Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column: Input + Cleaners (7 Cols) -->
+      <div class="lg:col-span-7 space-y-4">
+        
+        <div class="outer-card p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-purple-100 dark:border-purple-800/60">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Script / Narration Input
+              </span>
+
+              <div class="flex items-center gap-2">
+                <button onclick="shareWhatsApp()" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#0e1438] border border-purple-200 dark:border-purple-800/80 text-[#7701e4] dark:text-purple-300 transition shadow-sm cursor-pointer">
+                  WhatsApp Share
+                </button>
+                <button onclick="copyText()" class="text-xs font-bold px-3 py-1.5 rounded-xl btn-gradient text-white transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                  <span id="copy-status">Copy Text</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Pure Real-Time Input Textarea -->
+            <textarea 
+              id="script-input" 
+              rows="14" 
+              oninput="processText()" 
+              placeholder="Type or paste your video script, talking head narration, or social caption here..."
+              class="w-full bg-white dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/80 focus:border-[#7701e4] focus:ring-4 focus:ring-[#7701e4]/10 rounded-2xl p-4 text-[#0F172A] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none font-medium text-sm leading-relaxed resize-y shadow-inner transition"
+            ></textarea>
+
+            <!-- Quick Clean-Up Tools Toolbar -->
+            <div class="pt-2 border-t border-purple-100 dark:border-purple-800/60">
+              <span class="text-[11px] uppercase font-extrabold tracking-wider text-purple-900/80 dark:text-purple-300 block mb-2.5 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#8609fb]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                QUICK CLEAN-UP TOOLS
+              </span>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="cleanSpaces()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">Trim Spaces</button>
+                <button onclick="cleanLines()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">Remove Blank Lines</button>
+                <button onclick="cleanTags()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">Strip Tags / MD</button>
+                <button onclick="toTitleCase()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">Title Case</button>
+                <button onclick="toUpperCase()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">UPPER</button>
+                <button onclick="toLowerCase()" class="px-3 py-1.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition shadow-sm cursor-pointer">lower</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Speech Cadence + Keyword Density (5 Cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Speech Cadence Panel -->
+        <div class="outer-card p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-purple-100 dark:border-purple-800/60">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-[#8609fb]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                SPEECH CADENCE (WPM)
+              </span>
+              <span class="text-xs font-mono-code font-bold px-2.5 py-1 rounded-xl bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 text-[#7701e4] dark:text-[#c084fc] shadow-sm" id="cadence-badge">140 WPM</span>
+            </div>
+
+            <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+              Different video genres demand radically different speech velocities. Select your delivery style:
+            </p>
+
+            <div class="space-y-2.5">
+              <!-- Option 1 -->
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 hover:border-[#7701e4] dark:hover:border-[#8609fb] cursor-pointer transition shadow-sm group">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="cadence_preset" value="165" onchange="setWpm(165)" class="text-[#7701e4] focus:ring-0 bg-transparent accent-[#7701e4]">
+                  <div>
+                    <div class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-white transition">Fast Promo / TikTok Hook</div>
+                    <div class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">High energy, quick cuts, ad reels</div>
+                  </div>
+                </div>
+                <span class="text-xs font-mono-code font-bold text-slate-700 dark:text-slate-300">165 WPM</span>
+              </label>
+
+              <!-- Option 2 (Default) -->
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-[#070a1c] border-2 border-[#7701e4] dark:border-[#8609fb] cursor-pointer transition shadow-sm group">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="cadence_preset" value="140" checked onchange="setWpm(140)" class="text-[#7701e4] focus:ring-0 bg-transparent accent-[#7701e4]">
+                  <div>
+                    <div class="text-xs font-bold text-[#7701e4] dark:text-white">Conversational YouTube</div>
+                    <div class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Standard informative talking-head</div>
+                  </div>
+                </div>
+                <span class="text-xs font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc]">140 WPM</span>
+              </label>
+
+              <!-- Option 3 -->
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 hover:border-[#7701e4] dark:hover:border-[#8609fb] cursor-pointer transition shadow-sm group">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="cadence_preset" value="115" onchange="setWpm(115)" class="text-[#7701e4] focus:ring-0 bg-transparent accent-[#7701e4]">
+                  <div>
+                    <div class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-white transition">Cinematic / Documentary</div>
+                    <div class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Dramatic pauses, emotional pacing</div>
+                  </div>
+                </div>
+                <span class="text-xs font-mono-code font-bold text-slate-700 dark:text-slate-300">115 WPM</span>
+              </label>
+            </div>
+
+            <!-- Custom Slider -->
+            <div class="pt-2 border-t border-purple-100 dark:border-purple-800/60">
+              <div class="flex justify-between items-center text-xs font-bold text-slate-600 dark:text-slate-400 mb-2">
+                <span>Custom Velocity:</span>
+                <span class="font-mono-code text-[#7701e4] dark:text-[#c084fc]" id="slider-val">140 words/min</span>
+              </div>
+              <input type="range" id="wpm-slider" min="80" max="250" value="140" oninput="onSliderChange(this.value)" class="w-full bg-slate-200 dark:bg-[#070a1c] h-1.5 rounded-lg appearance-none cursor-pointer">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Keyword Density Table -->
+        <div class="outer-card p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-purple-100 dark:border-purple-800/60">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-[#8609fb]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                KEYWORD DENSITY
+              </span>
+              <span class="text-[10px] font-mono-code font-bold text-slate-500 dark:text-slate-400">Stop-words filtered</span>
+            </div>
+
+            <!-- Tab Toggle -->
+            <div class="grid grid-cols-2 gap-1 p-1 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold shadow-sm">
+              <button id="btn-1word" onclick="switchDensityTab(1)" class="py-1.5 rounded-lg btn-gradient text-white transition cursor-pointer">Single Words</button>
+              <button id="btn-2word" onclick="switchDensityTab(2)" class="py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer">2-Word Phrases</button>
+            </div>
+
+            <!-- Table Header -->
+            <div class="grid grid-cols-12 text-[11px] font-extrabold text-slate-500 dark:text-slate-400 px-3 pb-2 border-b border-purple-200/60 dark:border-purple-800/60 uppercase">
+              <div class="col-span-7">Keyword / Phrase</div>
+              <div class="col-span-2 text-right">Count</div>
+              <div class="col-span-3 text-right">Density</div>
+            </div>
+
+            <!-- Table Rows List -->
+            <div id="density-rows" class="divide-y divide-purple-100 dark:divide-purple-800/40 text-xs max-h-48 overflow-y-auto">
+              <div class="py-6 text-center text-slate-400 italic text-[11px]">Type text to generate keyword frequency breakdown.</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Community Callout -->
+  <footer class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 pb-8">
+    <div class="outer-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-purple-500/20">
+          X
+        </div>
+        <div>
+          <h4 class="text-xs font-extrabold text-[#0F172A] dark:text-white">Xentro Editor Council</h4>
+          <p class="text-[11px] text-[#64748B] dark:text-slate-400 font-medium">Join 500+ video editors sharing motion presets, project critiques, and freelance tips.</p>
+        </div>
+      </div>
+
+      <a href="https://chat.whatsapp.com/JRh8GHhmmwk9DzIK13NjHy" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-5 py-2.5 btn-gradient text-white font-bold text-xs rounded-xl shadow-md transition text-center shrink-0">
+        Join Free Community &rarr;
+      </a>
+    </div>
+  </footer>
+
+  <!-- Script Logic (Strict & Verified) -->
+  <script>
+    let currentWpm = 140;
+    let densityMode = 1;
+
+    const stopWords = new Set([
+      "a","about","above","after","again","against","all","am","an","and","any","are","aren't","as","at","be","because","been","before","being","below","between","both","but","by","can't","cannot","could","couldn't","did","didn't","do","does","doesn't","doing","don't","down","during","each","few","for","from","further","had","hadn't","has","hasn't","have","haven't","having","he","he'd","he'll","he's","her","here","here's","hers","herself","him","himself","his","how","how's","i","i'd","i'll","i'm","i've","if","in","into","is","isn't","it","it's","its","itself","let's","me","more","most","mustn't","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours","ourselves","out","over","own","same","shan't","she","she'd","she'll","she's","should","shouldn't","so","some","such","than","that","that's","the","their","theirs","them","themselves","then","there","there's","these","they","they'd","they'll","they're","they've","this","those","through","to","too","under","until","up","very","was","wasn't","we","we'd","we'll","we're","we've","were","weren't","what","what's","when","when's","where","where's","which","while","who","who's","whom","why","why's","with","won't","would","wouldn't","you","you'd","you'll","you're","you've","your","yours","yourself","yourselves","1","2","3","4","5"
+    ]);
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('xentro_theme', isDark ? 'dark' : 'light');
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds) || seconds <= 0) return '00:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.round(seconds % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function setWpm(wpm) {
+      currentWpm = wpm;
+      document.getElementById('wpm-slider').value = wpm;
+      document.getElementById('slider-val').innerText = `${wpm} words/min`;
+      document.getElementById('cadence-badge').innerText = `${wpm} WPM`;
+      document.getElementById('stat-vo-label').innerText = `at ${wpm} WPM`;
+      processText();
+    }
+
+    function onSliderChange(val) {
+      currentWpm = parseInt(val);
+      document.getElementById('slider-val').innerText = `${val} words/min`;
+      document.getElementById('cadence-badge').innerText = `${val} WPM`;
+      document.getElementById('stat-vo-label').innerText = `at ${val} WPM`;
+      
+      const radios = document.getElementsByName('cadence_preset');
+      radios.forEach(r => r.checked = (parseInt(r.value) === currentWpm));
+      processText();
+    }
+
+    function switchDensityTab(mode) {
+      densityMode = mode;
+      const b1 = document.getElementById('btn-1word');
+      const b2 = document.getElementById('btn-2word');
+      if (mode === 1) {
+        b1.className = 'py-1.5 rounded-lg btn-gradient text-white transition cursor-pointer';
+        b2.className = 'py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+      } else {
+        b2.className = 'py-1.5 rounded-lg btn-gradient text-white transition cursor-pointer';
+        b1.className = 'py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+      }
+      processText();
+    }
+
+    function processText() {
+      const text = document.getElementById('script-input').value;
+
+      const chars = text.length;
+      const charsNoSpace = text.replace(/\s/g, '').length;
+      const wordsArray = text.trim().match(/\b[\w'-]+\b/g) || [];
+      const wordCount = wordsArray.length;
+
+      const lines = text ? text.split('\n').length : 0;
+      const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+      const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g) || (text.trim() ? [text.trim()] : []);
+      const sentenceCount = text.trim() ? sentences.length : 0;
+      const avgWps = sentenceCount > 0 ? (wordCount / sentenceCount).toFixed(1) : 0;
+
+      // Update counters
+      document.getElementById('stat-words').innerText = wordCount.toLocaleString();
+      document.getElementById('stat-chars').innerText = chars.toLocaleString();
+      document.getElementById('stat-chars-nospace').innerText = charsNoSpace.toLocaleString();
+      document.getElementById('stat-lines').innerText = lines;
+      document.getElementById('stat-paragraphs').innerText = paragraphs;
+      document.getElementById('stat-sentences').innerText = sentenceCount;
+      document.getElementById('stat-avg-words').innerText = avgWps;
+
+      // Silent Reading time (220 WPM)
+      document.getElementById('stat-reading-time').innerText = formatTime((wordCount / 220) * 60);
+
+      // Estimated VO Time
+      const voSeconds = (wordCount / currentWpm) * 60;
+      document.getElementById('stat-vo-time').innerText = formatTime(voSeconds);
+
+      // Target Fit Badge Logic
+      const fitText = document.getElementById('target-fit-text');
+      if (voSeconds === 0) {
+        fitText.innerText = 'Target Fit: Enter Script';
+      } else if (voSeconds <= 30) {
+        fitText.innerText = 'Target Fit: Hook / Micro Ad (< 30s)';
+      } else if (voSeconds <= 60) {
+        fitText.innerText = 'Target Fit: Full YouTube Short / Ad Spot (30s - 60s)';
+      } else if (voSeconds <= 180) {
+        fitText.innerText = 'Target Fit: Mid-Form Explainer (1m - 3m)';
+      } else {
+        fitText.innerText = 'Target Fit: Long-Form Video / Podcast (> 3m)';
+      }
+
+      renderDensity(wordsArray);
+    }
+
+    function renderDensity(words) {
+      const container = document.getElementById('density-rows');
+      if (words.length < 5) {
+        container.innerHTML = `<div class="py-6 text-center text-slate-400 italic text-[11px]">Type text to generate keyword frequency breakdown.</div>`;
+        return;
+      }
+
+      const freqMap = {};
+      const cleanWords = words.map(w => w.toLowerCase().replace(/[^a-z0-9]/g, '')).filter(w => w.length > 1);
+
+      if (densityMode === 1) {
+        cleanWords.forEach(w => {
+          if (!stopWords.has(w)) {
+            freqMap[w] = (freqMap[w] || 0) + 1;
+          }
+        });
+      } else {
+        for (let i = 0; i < cleanWords.length - 1; i++) {
+          const w1 = cleanWords[i];
+          const w2 = cleanWords[i + 1];
+          if (!stopWords.has(w1) || !stopWords.has(w2)) {
+            const phrase = `${w1} ${w2}`;
+            freqMap[phrase] = (freqMap[phrase] || 0) + 1;
+          }
+        }
+      }
+
+      const sorted = Object.entries(freqMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 7);
+
+      if (sorted.length === 0) {
+        container.innerHTML = `<div class="py-4 text-center text-slate-400 text-[11px]">No repeated non-stop keywords detected.</div>`;
+        return;
+      }
+
+      container.innerHTML = sorted.map(([item, count]) => {
+        const pct = ((count / words.length) * 100).toFixed(1);
+        return `
+          <div class="grid grid-cols-12 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-purple-50/80 dark:hover:bg-[#131a42] rounded-xl transition">
+            <div class="col-span-7 font-bold text-slate-800 dark:text-slate-100 capitalize">${item}</div>
+            <div class="col-span-2 text-right font-mono-code font-bold text-slate-600 dark:text-slate-300">${count}</div>
+            <div class="col-span-3 text-right font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc]">${pct}%</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Cleaners
+    function cleanSpaces() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.replace(/[ \t]+/g, ' ').trim();
+      processText();
+    }
+
+    function cleanLines() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.split('\n').filter(l => l.trim().length > 0).join('\n');
+      processText();
+    }
+
+    function cleanTags() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.replace(/<\/?[^>]+(>|$)/g, "").replace(/[*_#~`]/g, "");
+      processText();
+    }
+
+    function toTitleCase() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      processText();
+    }
+
+    function toUpperCase() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.toUpperCase();
+      processText();
+    }
+
+    function toLowerCase() {
+      const el = document.getElementById('script-input');
+      el.value = el.value.toLowerCase();
+      processText();
+    }
+
+    function clearText() {
+      document.getElementById('script-input').value = '';
+      processText();
+    }
+
+    function copyText() {
+      const text = document.getElementById('script-input').value;
+      if (!text) return;
+      navigator.clipboard.writeText(text);
+      const label = document.getElementById('copy-status');
+      label.innerText = 'Copied!';
+      setTimeout(() => label.innerText = 'Copy Text', 2000);
+    }
+
+    function shareWhatsApp() {
+      const words = document.getElementById('stat-words').innerText;
+      const readingTime = document.getElementById('stat-reading-time').innerText;
+      const voTime = document.getElementById('stat-vo-time').innerText;
+      const msg = `*Script Stats (via Xentro Studios)*\n• Words: ${words}\n• Reading Time: ${readingTime}\n• Voiceover Duration: ${voTime} (at ${currentWpm} WPM)\n\nAnalyze your script free: https://xentro-tools.vercel.app/`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function loadSample() {
+      document.getElementById('script-input').value = 
+`Instagram.
+
+Most editors make the mistake of cranking export settings to maximum. But social algorithms compress high bitrate files aggressively, leaving your final post looking pixelated.
+
+Here is the exact formula:
+1. Lock your timeline frame rate to 30 or 60 fps.
+2. Target an average bitrate between 12 to 15 Mbps for 1080p vertical video.
+3. Apply a subtle unsharp mask filter before your final export pass.
+
+Follow this workflow, and your edits will stay razor-sharp every single time.`;
+      processText();
+    }
+
+    // Auto-load sample to initialize states
+    loadSample();
+  </script>
+</body>
+</html>

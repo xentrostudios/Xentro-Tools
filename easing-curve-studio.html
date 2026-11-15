@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion Curve Studio | Xentro Studios</title>
+
+  <!-- Instant Theme Script to Prevent Flash -->
+  <script>
+    if (localStorage.getItem('xentro_theme') === 'dark' || 
+       (!localStorage.getItem('xentro_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Background Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.10) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.05) 0px, transparent 45%);
+    }
+    .dark .draftr-bg {
+      background-color: #03050c;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.22) 0px, transparent 60%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.14) 0px, transparent 45%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.12) 0px, transparent 50%);
+    }
+
+    /* Outer Wrapper Card with Distinct Purple Separation */
+    .outer-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(119, 1, 228, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      border-radius: 28px;
+      transition: all 0.25s ease;
+    }
+    .dark .outer-card {
+      background: #0d122e;
+      border: 1px solid rgba(119, 1, 228, 0.38);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 22px 0 rgba(119, 1, 228, 0.18);
+    }
+    .outer-card:hover {
+      border-color: rgba(216, 180, 254, 0.9);
+      box-shadow: 0 14px 30px -4px rgba(119, 1, 228, 0.08);
+    }
+    .dark .outer-card:hover {
+      border-color: rgba(134, 9, 251, 0.65);
+      box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75), 0 0 30px 2px rgba(134, 9, 251, 0.28);
+    }
+
+    /* Primary Brand Gradient Buttons (#7701e4 to #8609fb) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7701e4 0%, #8609fb 100%);
+      box-shadow: 0 4px 14px 0 rgba(119, 1, 228, 0.35);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #6400c2 0%, #7701e4 100%);
+      box-shadow: 0 6px 22px 0 rgba(134, 9, 251, 0.5);
+    }
+
+    /* Progress Bar */
+    .progress-bar-gradient {
+      background: linear-gradient(90deg, #7701e4 0%, #8609fb 50%, #c084fc 100%);
+      box-shadow: 0 2px 10px rgba(119, 1, 228, 0.45);
+    }
+
+    /* Animated Day/Night Pill Switcher */
+    .theme-toggle-btn {
+      position: relative;
+      width: 68px;
+      height: 32px;
+      border-radius: 9999px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .theme-toggle-btn .sky-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #93c5fd 100%);
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .clouds {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      width: 32px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+    .theme-toggle-btn .clouds::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .theme-toggle-btn .night-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #090d24 0%, #171d3d 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .stars {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-size: 8px;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 12px 6px 0px #fff, 6px 12px 0px #fff;
+    }
+    .theme-toggle-btn .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .dark .theme-toggle-btn {
+      border-color: rgba(119, 1, 228, 0.4);
+    }
+    .dark .theme-toggle-btn .sky-bg {
+      opacity: 0;
+    }
+    .dark .theme-toggle-btn .night-bg {
+      opacity: 1;
+    }
+    .dark .theme-toggle-btn .toggle-thumb {
+      transform: translateX(36px);
+      background: #cbd5e1;
+      box-shadow: inset -2px -2px 0 0 #94a3b8, 0 0 8px rgba(203, 213, 225, 0.4);
+    }
+
+    /* Tooltip Popovers */
+    .info-container {
+      position: relative;
+      display: inline-block;
+    }
+    .info-tooltip {
+      position: absolute;
+      top: 135%;
+      right: -8px;
+      width: 290px;
+      z-index: 60;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .info-container:hover .info-tooltip,
+    .info-container:focus-within .info-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .canvas-touch-guard {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Range Sliders */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #8609fb;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(134, 9, 251, 0.7);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #070a1c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2b1f55;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8609fb;
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] dark:text-slate-100 min-h-screen flex flex-col justify-between selection:bg-[#7701e4] selection:text-white antialiased transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/70 dark:border-purple-900/40 bg-white/80 dark:bg-[#070b1e]/85 backdrop-blur-md px-4 sm:px-6 py-4 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="https://xentro-tools.vercel.app/" target="_self" class="flex items-center gap-3.5 select-none group">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-600/30 group-hover:scale-105 transition duration-300">
+          X
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">Xentro</span>
+            <span class="text-xl font-extrabold tracking-tight text-[#8609fb]">Studios</span>
+          </div>
+          <span class="text-xs font-semibold text-[#64748B] dark:text-slate-400 tracking-tight mt-1">Create your own dreams</span>
+        </div>
+      </a>
+
+      <!-- Header Controls: Back to Tools + Day/Night Toggle -->
+      <div class="flex items-center gap-3.5">
+        <a href="https://xentro-tools.vercel.app/" target="_self" class="group flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#131a42] border border-slate-200/90 dark:border-purple-800/60 shadow-sm hover:border-[#7701e4] dark:hover:border-[#8609fb] hover:shadow-md transition-all duration-200">
+          <span class="w-5 h-5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-purple-300 group-hover:bg-[#7701e4] group-hover:text-white flex items-center justify-center transition-colors">
+            <svg class="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-[#c084fc] transition-colors">Back to Tools</span>
+        </a>
+
+        <!-- Animated Day/Night Pill Switcher -->
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <div class="sky-bg"><div class="clouds"></div></div>
+          <div class="night-bg"><div class="stars">✦</div></div>
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Header Section -->
+  <section class="max-w-4xl w-full mx-auto text-center px-4 mt-8 mb-8">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 dark:bg-[#131a42] backdrop-blur border border-purple-100 dark:border-purple-700/60 text-[#7701e4] dark:text-purple-300 text-xs font-bold shadow-sm mb-3">
+      <span class="w-2 h-2 rounded-full bg-[#8609fb] animate-pulse"></span>
+      EASING STUDIO
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+      Motion Curve Studio
+    </h1>
+    <p class="text-xs sm:text-sm text-[#64748B] dark:text-slate-300 mt-2 max-w-2xl mx-auto font-medium">
+      Craft custom Bézier curves and export instant speed handles for After Effects, DaVinci Resolve, and CSS.
+    </p>
+  </section>
+
+  <!-- Main 3-Column Studio Workspace -->
+  <main class="max-w-7xl w-full mx-auto px-4 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
+    
+    <!-- LEFT: INTERACTIVE BÉZIER GRAPH (4 Cols) -->
+    <div class="lg:col-span-4 outer-card p-4 sm:p-5 flex flex-col justify-between">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Header & Preset Selector -->
+        <div class="flex items-center justify-between gap-2">
+          <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm">
+            INTERACTIVE GRAPH
+          </span>
+          <select id="presetDropdown" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white text-xs font-bold px-2.5 py-1.5 rounded-xl border border-purple-200 dark:border-purple-800/80 shadow-sm outline-none cursor-pointer max-w-[170px] truncate focus:border-[#8609fb]">
+            <optgroup label="Standard & UI">
+              <option value="pop" selected>Pop (Snappy UI)</option>
+              <option value="expo">Expo Out (Decay)</option>
+              <option value="snappy">Snappy Ease</option>
+              <option value="filmic">Smooth Filmic</option>
+              <option value="linear">Linear Constant</option>
+            </optgroup>
+            <optgroup label="Dynamics & Impact">
+              <option value="smash">Quintic Smash</option>
+              <option value="overshoot_soft">Overshoot Soft</option>
+              <option value="overshoot_punchy">Overshoot Punchy</option>
+              <option value="anticipation">Anticipation (Wind-Up)</option>
+            </optgroup>
+            <optgroup label="Physics Simulations">
+              <option value="spring">Elastic Spring</option>
+              <option value="bounce">Floor Bounce</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="relative w-full aspect-square max-w-[320px] mx-auto bg-white dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/70 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-1">
+          <canvas id="curveCanvas" width="320" height="320" class="canvas-touch-guard w-full h-full block cursor-crosshair"></canvas>
+          <div class="absolute bottom-2 left-3 text-[10px] font-mono-code text-slate-400 dark:text-slate-400 pointer-events-none select-none">Start (0, 0)</div>
+          <div class="absolute top-2 right-3 text-[10px] font-mono-code text-slate-400 dark:text-slate-400 pointer-events-none select-none">End (1, 1)</div>
+        </div>
+
+        <!-- Coordinates Readout (Strict Brand Purples) -->
+        <div class="flex items-center justify-between px-1 text-xs font-mono-code">
+          <div class="flex items-center gap-1.5 bg-white/90 dark:bg-[#070a1c] px-2.5 py-1 rounded-lg border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb] shadow-sm shadow-[#8609fb]/60"></span>
+            <span class="text-slate-500 dark:text-slate-300">P1: <strong id="lbl-p1" class="text-[#7701e4] dark:text-[#c084fc] font-bold">0.16, 1.00</strong></span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-white/90 dark:bg-[#070a1c] px-2.5 py-1 rounded-lg border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#c084fc] shadow-sm shadow-purple-400/60"></span>
+            <span class="text-slate-500 dark:text-slate-300">P2: <strong id="lbl-p2" class="text-purple-700 dark:text-purple-200 font-bold">0.30, 1.00</strong></span>
+          </div>
+        </div>
+
+        <!-- Controls Helper -->
+        <div class="pt-2 border-t border-purple-100 dark:border-purple-800/50 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+          <span>Click or drag purple control handles</span>
+          <button id="btnResetGraph" class="text-[#7701e4] dark:text-purple-400 hover:underline font-bold transition cursor-pointer">Reset</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MIDDLE: LIVE PREVIEW SANDBOX (4 Cols) -->
+    <div class="lg:col-span-4 outer-card p-4 sm:p-5">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Header & Loop Toggle -->
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+            LIVE PREVIEW
+          </span>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-white select-none">
+            <input type="checkbox" id="loopToggle" checked class="w-4 h-4 rounded border-slate-300 dark:border-purple-800/80 text-[#7701e4] focus:ring-0 cursor-pointer accent-[#7701e4]">
+            <span class="font-bold">Loop</span>
+          </label>
+        </div>
+
+        <!-- Mode Selector Tabs -->
+        <div class="grid grid-cols-4 gap-1 p-1 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/70 rounded-xl shadow-sm" id="modeSelector">
+          <button type="button" onclick="setAnimMode('slide', this)" class="mode-btn py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-white transition cursor-pointer">Slide</button>
+          <button type="button" onclick="setAnimMode('pop', this)" class="mode-btn py-1.5 text-xs font-bold rounded-lg btn-gradient text-white shadow-md transition cursor-pointer">Pop</button>
+          <button type="button" onclick="setAnimMode('fade', this)" class="mode-btn py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-white transition cursor-pointer">Fade</button>
+          <button type="button" onclick="setAnimMode('tilt', this)" class="mode-btn py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-white transition cursor-pointer">Tilt</button>
+        </div>
+
+        <!-- Interactive Motion Stage -->
+        <div class="h-44 bg-white dark:bg-[#070a1c] rounded-2xl border border-purple-200 dark:border-purple-800/70 relative overflow-hidden flex items-center justify-center shadow-inner">
+          <div class="absolute inset-0 bg-[radial-gradient(#c084fc_1px,transparent_1px)] dark:bg-[radial-gradient(#7701e4_1px,transparent_1px)] [background-size:16px_16px] opacity-25 dark:opacity-40"></div>
+          
+          <div id="previewCard" class="relative z-10 w-24 h-24 rounded-2xl bg-gradient-to-tr from-[#7701e4] via-[#8609fb] to-[#c084fc] flex flex-col items-center justify-center shadow-2xl shadow-purple-600/50 border border-white/20 select-none">
+            <span class="text-2xl font-black text-white tracking-tighter">X</span>
+            <span class="text-[9px] font-bold text-white/95 uppercase tracking-widest mt-0.5 font-mono-code">MOTION</span>
+          </div>
+        </div>
+
+        <!-- Timeline Progress -->
+        <div class="space-y-1.5 bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-mono-code text-slate-500 dark:text-slate-300">
+            <span class="font-bold">Timeline Progress</span>
+            <span id="progressText" class="text-[#7701e4] dark:text-[#c084fc] font-bold">100%</span>
+          </div>
+          <div class="h-2 bg-slate-100 dark:bg-[#131a42] rounded-full overflow-hidden border border-purple-100 dark:border-purple-800/60 p-0.5">
+            <div id="progressBar" class="h-full progress-bar-gradient rounded-full w-full"></div>
+          </div>
+        </div>
+
+        <!-- Duration Slider -->
+        <div class="space-y-1.5 bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-mono-code text-slate-500 dark:text-slate-300">
+            <span class="font-bold">Animation Duration</span>
+            <span id="durationVal" class="text-[#7701e4] dark:text-[#c084fc] font-bold">0.80s</span>
+          </div>
+          <input type="range" id="durationSlider" min="0.2" max="2.5" step="0.05" value="0.8" class="w-full h-1.5 bg-slate-200 dark:bg-[#131a42] rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <!-- Replay Action -->
+        <button type="button" onclick="triggerAnimation()" class="w-full py-3 btn-gradient text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md cursor-pointer">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Trigger Replay
+        </button>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: TARGET SOFTWARES (4 Cols) -->
+    <div class="lg:col-span-4 space-y-6">
+      
+      <!-- CARD 1: AFTER EFFECTS -->
+      <div class="outer-card p-4 sm:p-5">
+        <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#EEF2FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-3.5 shadow-sm">
+          
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb] shadow-sm shadow-purple-500/70"></span>
+              <h3 class="text-xs font-extrabold tracking-wider uppercase text-slate-800 dark:text-white">AFTER EFFECTS</h3>
+              
+              <div class="info-container">
+                <button type="button" class="w-4 h-4 rounded-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800 text-[10px] font-bold text-[#7701e4] dark:text-purple-300 flex items-center justify-center transition cursor-pointer">ⓘ</button>
+                <div class="info-tooltip bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl text-left border border-purple-200 dark:border-purple-700/70">
+                  <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-1.5 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#7701e4]"></span> After Effects Guide
+                  </div>
+                  <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
+                    <p><strong>Method 1 (Expression):</strong> Alt+Click the stopwatch on Position, Scale, or Opacity & press <kbd class="px-1 py-0.5 rounded bg-purple-100 dark:bg-black/60 font-mono-code text-[10px] text-[#7701e4] dark:text-purple-300">Ctrl+V</kbd>.</p>
+                    <p><strong>Method 2 (Keyframe Velocity):</strong> Select keyframes &rarr; press <kbd class="px-1 py-0.5 rounded bg-purple-100 dark:bg-black/60 font-mono-code text-[10px] text-[#7701e4] dark:text-purple-300">Ctrl+Shift+K</kbd> &rarr; punch in Outgoing & Incoming Influence %.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span class="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-white dark:bg-[#070a1c] text-[#7701e4] dark:text-purple-300 border border-purple-200 dark:border-purple-800/80 font-bold shadow-sm">Ctrl+Shift+K</span>
+          </div>
+
+          <div class="bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 grid grid-cols-2 gap-2 shadow-sm">
+            <div>
+              <div class="text-[9px] uppercase font-bold tracking-wider text-slate-400">OUTGOING KEYFRAME</div>
+              <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Speed: <span class="font-mono-code font-bold text-slate-700 dark:text-slate-200">0</span></div>
+              <div class="text-sm font-bold text-[#8609fb] dark:text-[#c084fc] font-mono-code mt-0.5">Infl: <span id="aeOutVal">16%</span></div>
+            </div>
+            <div>
+              <div class="text-[9px] uppercase font-bold tracking-wider text-slate-400">INCOMING KEYFRAME</div>
+              <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Speed: <span class="font-mono-code font-bold text-slate-700 dark:text-slate-200">0</span></div>
+              <div class="text-sm font-bold text-[#7701e4] dark:text-purple-300 font-mono-code mt-0.5">Infl: <span id="aeInVal">70%</span></div>
+            </div>
+          </div>
+
+          <button type="button" id="btnCopyAE" class="w-full py-2.5 btn-gradient text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="btnCopyAELabel">Copy AE Expression (Alt+Click)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 2: DAVINCI RESOLVE -->
+      <div class="outer-card p-4 sm:p-5">
+        <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-3.5 shadow-sm">
+          
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb] shadow-sm shadow-purple-500/70"></span>
+              <h3 class="text-xs font-extrabold tracking-wider uppercase text-slate-800 dark:text-white">DAVINCI RESOLVE</h3>
+
+              <div class="info-container">
+                <button type="button" class="w-4 h-4 rounded-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800 text-[10px] font-bold text-[#7701e4] dark:text-purple-300 flex items-center justify-center transition cursor-pointer">ⓘ</button>
+                <div class="info-tooltip bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl text-left border border-purple-200 dark:border-purple-700/70">
+                  <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-1.5 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#8609fb]"></span> DaVinci Resolve Guide
+                  </div>
+                  <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
+                    <p><strong>Edit Page (Spline):</strong> Click the wavy spline icon on timeline clip &rarr; select keyframes &rarr; press <kbd class="px-1 py-0.5 rounded bg-purple-100 dark:bg-black/60 font-mono-code text-[10px] text-[#7701e4] dark:text-purple-300">T</kbd> &rarr; punch in Start & End Ease %.</p>
+                    <p><strong>Fusion Page:</strong> Open the Spline editor, select keyframes, and type ease percentages into the top Ease boxes.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span class="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-white dark:bg-[#070a1c] text-[#7701e4] dark:text-purple-300 border border-purple-200 dark:border-purple-800/80 font-bold shadow-sm">Spline (T)</span>
+          </div>
+
+          <div class="bg-white/90 dark:bg-[#070b1e] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 grid grid-cols-2 gap-2 shadow-sm">
+            <div>
+              <div class="text-[9px] uppercase font-bold tracking-wider text-slate-400">START EASE</div>
+              <div class="text-base font-bold text-[#7701e4] dark:text-[#c084fc] font-mono-code mt-0.5" id="resStartVal">16.0%</div>
+            </div>
+            <div>
+              <div class="text-[9px] uppercase font-bold tracking-wider text-slate-400">END EASE</div>
+              <div class="text-base font-bold text-[#7701e4] dark:text-[#c084fc] font-mono-code mt-0.5" id="resEndVal">70.0%</div>
+            </div>
+          </div>
+
+          <button type="button" id="btnCopyFusion" class="w-full py-2.5 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+            <svg class="w-3.5 h-3.5 text-[#8609fb] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4"/></svg>
+            <span id="btnCopyFusionLabel">Copy Fusion Spline Modifier</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 3: PREMIERE & UNIVERSAL (Cyan Icon Swapped to Solid Brand Violet) -->
+      <div class="outer-card p-4 sm:p-5">
+        <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-3.5 shadow-sm">
+          
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#7701e4] shadow-sm shadow-purple-500/70"></span>
+              <h3 class="text-xs font-extrabold tracking-wider uppercase text-slate-800 dark:text-white">PREMIERE & UNIVERSAL</h3>
+
+              <div class="info-container">
+                <button type="button" class="w-4 h-4 rounded-full bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800 text-[10px] font-bold text-[#7701e4] dark:text-purple-300 flex items-center justify-center transition cursor-pointer">ⓘ</button>
+                <div class="info-tooltip bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl text-left border border-purple-200 dark:border-purple-700/70">
+                  <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-1.5 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#7701e4]"></span> Premiere & Web Guide
+                  </div>
+                  <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
+                    <p><strong>Preset (.prfpset):</strong> Download preset &rarr; In Premiere Effects panel right-click <strong>Presets</strong> &rarr; Import Presets &rarr; Drag onto clip.</p>
+                    <p><strong>Velocity Handles:</strong> Right-click keyframes &rarr; Temporal Interpolation &rarr; Ease Out/In &rarr; Drag handles to match preview curve.</p>
+                    <p><strong>CSS / Web:</strong> Copy cubic-bezier value directly into Webflow, Framer, or stylesheets.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span class="text-[10px] font-mono-code font-bold text-slate-500 dark:text-slate-400">Cubic-Bezier</span>
+          </div>
+
+          <div class="bg-white/90 dark:bg-[#070b1e] p-2.5 font-mono-code text-xs text-[#7701e4] dark:text-[#c084fc] font-bold select-all border border-purple-100 dark:border-purple-800/60 rounded-xl shadow-sm truncate" id="cssValDisplay">
+            cubic-bezier(0.16, 1.00, 0.30, 1.00)
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btnCopyCss" class="py-2.5 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+              <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="btnCopyCssLabel">Copy CSS</span>
+            </button>
+
+            <button type="button" id="btnDownloadPreset" class="py-2.5 px-2 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+              <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Preset (.prfpset)</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Community Callout -->
+  <footer class="max-w-7xl w-full mx-auto px-4 pb-8">
+    <div class="outer-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-purple-500/20">
+          X
+        </div>
+        <div>
+          <h4 class="text-xs font-extrabold text-[#0F172A] dark:text-white">Xentro Editor Council</h4>
+          <p class="text-[11px] text-[#64748B] dark:text-slate-400 font-medium">Join 500+ video editors sharing motion presets, project critiques, and freelance tips.</p>
+        </div>
+      </div>
+
+      <a href="https://chat.whatsapp.com/JRh8GHhmmwk9DzIK13NjHy" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-5 py-2.5 btn-gradient text-white font-bold text-xs rounded-xl shadow-md transition text-center shrink-0">
+        Join Free Community &rarr;
+      </a>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-white/95 dark:bg-[#0d122e] backdrop-blur-md border border-purple-100 dark:border-purple-700/60 text-[#0F172A] dark:text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl">
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+    <span id="toast-text">Action complete</span>
+  </div>
+
+  <!-- Studio Core Engine -->
+  <script>
+    const PRESETS = {
+      pop: { p1: { x: 0.16, y: 1.00 }, p2: { x: 0.30, y: 1.00 }, type: 'bezier' },
+      expo: { p1: { x: 0.19, y: 1.00 }, p2: { x: 0.22, y: 1.00 }, type: 'bezier' },
+      snappy: { p1: { x: 0.70, y: 0.00 }, p2: { x: 0.30, y: 1.00 }, type: 'bezier' },
+      filmic: { p1: { x: 0.42, y: 0.00 }, p2: { x: 0.58, y: 1.00 }, type: 'bezier' },
+      smash: { p1: { x: 0.86, y: 0.00 }, p2: { x: 0.07, y: 1.00 }, type: 'bezier' },
+      overshoot_soft: { p1: { x: 0.34, y: 1.45 }, p2: { x: 0.64, y: 1.00 }, type: 'bezier' },
+      overshoot_punchy: { p1: { x: 0.18, y: 1.35 }, p2: { x: 0.35, y: 1.00 }, type: 'bezier' },
+      anticipation: { p1: { x: 0.36, y: -0.25 }, p2: { x: 0.64, y: 1.00 }, type: 'bezier' },
+      spring: { p1: { x: 0.25, y: 1.25 }, p2: { x: 0.50, y: 0.90 }, type: 'spring' },
+      bounce: { p1: { x: 0.20, y: 1.20 }, p2: { x: 0.40, y: 1.00 }, type: 'bounce' },
+      linear: { p1: { x: 0.00, y: 0.00 }, p2: { x: 1.00, y: 1.00 }, type: 'bezier' }
+    };
+
+    let currentPresetKey = 'pop';
+    let p1 = { x: 0.16, y: 1.00 };
+    let p2 = { x: 0.30, y: 1.00 };
+    let activeHandle = null;
+    let loopTimer = null;
+    let animRafId = null;
+    let currentAnimMode = 'pop';
+    let animDuration = 0.80;
+
+    const canvas = document.getElementById('curveCanvas');
+    const ctx = canvas.getContext('2d');
+    const presetDropdown = document.getElementById('presetDropdown');
+    const lblP1 = document.getElementById('lbl-p1');
+    const lblP2 = document.getElementById('lbl-p2');
+    const aeOutVal = document.getElementById('aeOutVal');
+    const aeInVal = document.getElementById('aeInVal');
+    const resStartVal = document.getElementById('resStartVal');
+    const resEndVal = document.getElementById('resEndVal');
+    const cssValDisplay = document.getElementById('cssValDisplay');
+    const btnResetGraph = document.getElementById('btnResetGraph');
+
+    const previewCard = document.getElementById('previewCard');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const durationSlider = document.getElementById('durationSlider');
+    const durationVal = document.getElementById('durationVal');
+    const loopToggle = document.getElementById('loopToggle');
+
+    const btnCopyAE = document.getElementById('btnCopyAE');
+    const btnCopyAELabel = document.getElementById('btnCopyAELabel');
+    const btnCopyFusion = document.getElementById('btnCopyFusion');
+    const btnCopyFusionLabel = document.getElementById('btnCopyFusionLabel');
+    const btnCopyCss = document.getElementById('btnCopyCss');
+    const btnCopyCssLabel = document.getElementById('btnCopyCssLabel');
+    const btnDownloadPreset = document.getElementById('btnDownloadPreset');
+
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('xentro_theme', isDark ? 'dark' : 'light');
+      draw();
+      showToast(isDark ? 'Dark theme enabled' : 'Light theme enabled');
+    }
+
+    const padding = 36;
+    const graphSize = canvas.width - (padding * 2);
+
+    function toCanvasX(nx) { return padding + (nx * graphSize); }
+    function toCanvasY(ny) { return (canvas.height - padding) - (ny * graphSize); }
+    function fromCanvasX(cx) {
+      const norm = (cx - padding) / graphSize;
+      return Math.max(0, Math.min(1, Math.round(norm * 100) / 100));
+    }
+    function fromCanvasY(cy) {
+      const norm = ((canvas.height - padding) - cy) / graphSize;
+      return Math.max(-0.35, Math.min(1.45, Math.round(norm * 100) / 100));
+    }
+
+    function showToast(msg) {
+      toastText.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2200);
+    }
+
+    function copyToClipboard(text, successMsg) {
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(successMsg);
+    }
+
+    /* PURE BRAND CANVAS RENDERING */
+    function draw() {
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = isDark ? '#070a1c' : '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grid Lines
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = isDark ? 'rgba(119, 1, 228, 0.18)' : '#F1F5F9';
+      ctx.beginPath();
+      for (let i = 0; i <= 4; i++) {
+        const step = padding + (i * graphSize / 4);
+        ctx.moveTo(padding, step);
+        ctx.lineTo(canvas.width - padding, step);
+        ctx.moveTo(step, padding);
+        ctx.lineTo(step, canvas.height - padding);
+      }
+      ctx.stroke();
+
+      // Outer Bounds
+      ctx.strokeStyle = isDark ? 'rgba(119, 1, 228, 0.45)' : '#E2E8F0';
+      ctx.strokeRect(padding, padding, graphSize, graphSize);
+
+      // Diagonal Guide
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = isDark ? 'rgba(134, 9, 251, 0.35)' : '#CBD5E1';
+      ctx.beginPath();
+      ctx.moveTo(padding, canvas.height - padding);
+      ctx.lineTo(canvas.width - padding, padding);
+      ctx.stroke();
+      ctx.restore();
+
+      const cx1 = toCanvasX(p1.x);
+      const cy1 = toCanvasY(p1.y);
+      const cx2 = toCanvasX(p2.x);
+      const cy2 = toCanvasY(p2.y);
+      const startX = padding;
+      const startY = canvas.height - padding;
+      const endX = canvas.width - padding;
+      const endY = padding;
+
+      // Handle Lines in Brand Purples (No Cyan)
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(134, 9, 251, 0.6)';
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(cx1, cy1);
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(192, 132, 252, 0.7)';
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(cx2, cy2);
+      ctx.stroke();
+
+      // Soft Brand Glow behind Curve
+      ctx.save();
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = isDark ? 'rgba(119, 1, 228, 0.4)' : 'rgba(119, 1, 228, 0.18)';
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(cx1, cy1, cx2, cy2, endX, endY);
+      ctx.stroke();
+      ctx.restore();
+
+      // Main Curve Gradient (#7701e4 to #8609fb to #c084fc)
+      const grad = ctx.createLinearGradient(startX, startY, endX, endY);
+      grad.addColorStop(0, '#7701e4');
+      grad.addColorStop(0.5, '#8609fb');
+      grad.addColorStop(1, '#c084fc');
+
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(cx1, cy1, cx2, cy2, endX, endY);
+      ctx.stroke();
+
+      // P1 Control Point (Brand Purple #8609fb)
+      ctx.save();
+      ctx.shadowColor = '#8609fb';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#8609fb';
+      ctx.beginPath();
+      ctx.arc(cx1, cy1, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      // P2 Control Point (Bright Lilac #c084fc)
+      ctx.save();
+      ctx.shadowColor = '#c084fc';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#c084fc';
+      ctx.beginPath();
+      ctx.arc(cx2, cy2, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function getPointerPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      let cx = e.clientX;
+      let cy = e.clientY;
+      if (e.touches && e.touches.length > 0) {
+        cx = e.touches[0].clientX;
+        cy = e.touches[0].clientY;
+      }
+      return {
+        x: (cx - rect.left) * scaleX,
+        y: (cy - rect.top) * scaleY
+      };
+    }
+
+    function onPointerDown(e) {
+      const pos = getPointerPos(e);
+      const cx1 = toCanvasX(p1.x);
+      const cy1 = toCanvasY(p1.y);
+      const cx2 = toCanvasX(p2.x);
+      const cy2 = toCanvasY(p2.y);
+
+      const d1 = Math.hypot(pos.x - cx1, pos.y - cy1);
+      const d2 = Math.hypot(pos.x - cx2, pos.y - cy2);
+
+      if (d1 < 30) {
+        activeHandle = 'p1';
+      } else if (d2 < 30) {
+        activeHandle = 'p2';
+      } else {
+        activeHandle = (d1 < d2) ? 'p1' : 'p2';
+        onPointerMove(e);
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!activeHandle) return;
+      e.preventDefault();
+      const pos = getPointerPos(e);
+
+      if (activeHandle === 'p1') {
+        p1.x = fromCanvasX(pos.x);
+        p1.y = fromCanvasY(pos.y);
+      } else if (activeHandle === 'p2') {
+        p2.x = fromCanvasX(pos.x);
+        p2.y = fromCanvasY(pos.y);
+      }
+
+      currentPresetKey = 'custom';
+      updateOutputs();
+      draw();
+    }
+
+    function onPointerUp() {
+      if (activeHandle) {
+        activeHandle = null;
+        triggerAnimation();
+      }
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+    window.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('touchend', onPointerUp);
+
+    presetDropdown.addEventListener('change', (e) => {
+      const key = e.target.value;
+      currentPresetKey = key;
+      if (PRESETS[key]) {
+        p1 = { ...PRESETS[key].p1 };
+        p2 = { ...PRESETS[key].p2 };
+        updateOutputs();
+        draw();
+        triggerAnimation();
+      }
+    });
+
+    btnResetGraph.addEventListener('click', () => {
+      presetDropdown.value = 'pop';
+      currentPresetKey = 'pop';
+      p1 = { ...PRESETS.pop.p1 };
+      p2 = { ...PRESETS.pop.p2 };
+      updateOutputs();
+      draw();
+      triggerAnimation();
+    });
+
+    function updateOutputs() {
+      const x1 = p1.x.toFixed(2);
+      const y1 = p1.y.toFixed(2);
+      const x2 = p2.x.toFixed(2);
+      const y2 = p2.y.toFixed(2);
+
+      lblP1.textContent = `${x1}, ${y1}`;
+      lblP2.textContent = `${x2}, ${y2}`;
+
+      const aeOut = Math.max(1, Math.min(100, Math.round(p1.x * 100)));
+      const aeIn = Math.max(1, Math.min(100, Math.round((1 - p2.x) * 100)));
+      aeOutVal.textContent = `${aeOut}%`;
+      aeInVal.textContent = `${aeIn}%`;
+
+      resStartVal.textContent = `${(p1.x * 100).toFixed(1)}%`;
+      resEndVal.textContent = `${((1 - p2.x) * 100).toFixed(1)}%`;
+
+      const cssString = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+      cssValDisplay.textContent = cssString;
+    }
+
+    function setAnimMode(mode, btn) {
+      currentAnimMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => {
+        b.className = 'mode-btn py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-white transition cursor-pointer';
+      });
+      btn.className = 'mode-btn py-1.5 text-xs font-bold rounded-lg btn-gradient text-white shadow-md transition cursor-pointer';
+      triggerAnimation();
+    }
+
+    durationSlider.addEventListener('input', (e) => {
+      animDuration = parseFloat(e.target.value);
+      durationVal.textContent = `${animDuration.toFixed(2)}s`;
+      triggerAnimation();
+    });
+
+    function evaluateSpring(t) {
+      const w = 18;
+      const d = 6;
+      return 1 - Math.exp(-d * t) * Math.cos(w * t);
+    }
+
+    function evaluateBounce(t) {
+      const n1 = 7.5625;
+      const d1 = 2.75;
+      if (t < 1 / d1) {
+        return n1 * t * t;
+      } else if (t < 2 / d1) {
+        return n1 * (t -= 1.5 / d1) * t + 0.75;
+      } else if (t < 2.5 / d1) {
+        return n1 * (t -= 2.25 / d1) * t + 0.9375;
+      } else {
+        return n1 * (t -= 2.625 / d1) * t + 0.984375;
+      }
+    }
+
+    function triggerAnimation() {
+      clearTimeout(loopTimer);
+      if (animRafId) cancelAnimationFrame(animRafId);
+
+      const x1 = p1.x.toFixed(2);
+      const y1 = p1.y.toFixed(2);
+      const x2 = p2.x.toFixed(2);
+      const y2 = p2.y.toFixed(2);
+      const bezierStr = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+      const isPhysics = currentPresetKey === 'spring' || currentPresetKey === 'bounce';
+
+      previewCard.style.transition = 'none';
+      progressBar.style.transition = 'none';
+      progressBar.style.width = '0%';
+      progressText.textContent = '0%';
+
+      if (currentAnimMode === 'pop') {
+        previewCard.style.transform = 'scale(0.3)';
+        previewCard.style.opacity = '0';
+      } else if (currentAnimMode === 'slide') {
+        previewCard.style.transform = 'translateX(-110px)';
+        previewCard.style.opacity = '1';
+      } else if (currentAnimMode === 'fade') {
+        previewCard.style.transform = 'scale(1)';
+        previewCard.style.opacity = '0';
+      } else if (currentAnimMode === 'tilt') {
+        previewCard.style.transform = 'rotate(-25deg) scale(0.7)';
+        previewCard.style.opacity = '0.5';
+      }
+
+      requestAnimationFrame(() => {
+        const startTime = performance.now();
+        const durationMs = animDuration * 1000;
+
+        if (!isPhysics) {
+          requestAnimationFrame(() => {
+            previewCard.style.transition = `all ${animDuration}s ${bezierStr}`;
+            progressBar.style.transition = `width ${animDuration}s linear`;
+            
+            progressBar.style.width = '100%';
+            previewCard.style.transform = 'translate(0px) scale(1) rotate(0deg)';
+            previewCard.style.opacity = '1';
+
+            function step(now) {
+              const elapsed = now - startTime;
+              const progress = Math.min(1, elapsed / durationMs);
+              progressText.textContent = `${Math.round(progress * 100)}%`;
+              if (progress < 1) {
+                animRafId = requestAnimationFrame(step);
+              } else {
+                progressText.textContent = '100%';
+                if (loopToggle.checked) {
+                  loopTimer = setTimeout(() => {
+                    if (loopToggle.checked) triggerAnimation();
+                  }, 450);
+                }
+              }
+            }
+            animRafId = requestAnimationFrame(step);
+          });
+        } else {
+          function physicsStep(now) {
+            const elapsed = now - startTime;
+            const t = Math.min(1, elapsed / durationMs);
+            const val = currentPresetKey === 'spring' ? evaluateSpring(t) : evaluateBounce(t);
+
+            progressBar.style.width = `${Math.min(100, Math.round(t * 100))}%`;
+            progressText.textContent = `${Math.min(100, Math.round(t * 100))}%`;
+
+            if (currentAnimMode === 'pop') {
+              const s = 0.3 + (0.7 * val);
+              previewCard.style.transform = `scale(${s})`;
+              previewCard.style.opacity = `${Math.min(1, val * 1.2)}`;
+            } else if (currentAnimMode === 'slide') {
+              const x = -110 + (110 * val);
+              previewCard.style.transform = `translateX(${x}px)`;
+              previewCard.style.opacity = '1';
+            } else if (currentAnimMode === 'fade') {
+              previewCard.style.transform = 'scale(1)';
+              previewCard.style.opacity = `${Math.min(1, Math.max(0, val))}`;
+            } else if (currentAnimMode === 'tilt') {
+              const deg = -25 * (1 - val);
+              const sc = 0.7 + (0.3 * val);
+              previewCard.style.transform = `rotate(${deg}deg) scale(${sc})`;
+              previewCard.style.opacity = `${Math.min(1, 0.5 + 0.5 * val)}`;
+            }
+
+            if (t < 1) {
+              animRafId = requestAnimationFrame(physicsStep);
+            } else {
+              progressBar.style.width = '100%';
+              progressText.textContent = '100%';
+              previewCard.style.transform = 'translate(0px) scale(1) rotate(0deg)';
+              previewCard.style.opacity = '1';
+              if (loopToggle.checked) {
+                loopTimer = setTimeout(() => {
+                  if (loopToggle.checked) triggerAnimation();
+                }, 450);
+              }
+            }
+          }
+          animRafId = requestAnimationFrame(physicsStep);
+        }
+      });
+    }
+
+    loopToggle.addEventListener('change', () => {
+      if (loopToggle.checked) {
+        triggerAnimation();
+      } else {
+        clearTimeout(loopTimer);
+      }
+    });
+
+    btnCopyAE.addEventListener('click', () => {
+      const x1 = p1.x.toFixed(2);
+      const y1 = p1.y.toFixed(2);
+      const x2 = p2.x.toFixed(2);
+      const y2 = p2.y.toFixed(2);
+
+      let aeExpr = '';
+      if (currentPresetKey === 'spring' || currentPresetKey === 'bounce') {
+        aeExpr = 
+`// Xentro Studios Inertial Spring/Bounce Expression
+n = 0;
+if (numKeys > 0){
+  n = nearestKey(time).index;
+  if (key(n).time > time) n--;
+}
+if (n == 0) t = 0;
+else t = time - key(n).time;
+if (n > 0){
+  v = velocityAtTime(key(n).time - thisComp.frameDuration/10);
+  amp = 0.05; freq = 4.0; decay = 8.0;
+  value + v*amp*Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t);
+} else value;`;
+      } else {
+        aeExpr = 
+`// Xentro Studios Easing Curve: cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})
+function bezierEase(t, p1x, p1y, p2x, p2y) {
+  var u = 1 - t;
+  return 3*u*u*t*p1y + 3*u*t*t*p2y + t*t*t;
+}
+if (numKeys > 1) {
+  var t1 = key(1).time;
+  var t2 = key(2).time;
+  var progress = clamp((time - t1) / (t2 - t1), 0, 1);
+  var curved = bezierEase(progress, ${x1}, ${y1}, ${x2}, ${y2});
+  ease(curved, 0, 1, key(1).value, key(2).value);
+} else {
+  value;
+}`;
+      }
+
+      copyToClipboard(aeExpr, 'AE Expression copied! Alt+Click stopwatch and hit Ctrl+V.');
+      btnCopyAELabel.textContent = 'Copied to Clipboard!';
+      setTimeout(() => { btnCopyAELabel.textContent = 'Copy AE Expression (Alt+Click)'; }, 2000);
+    });
+
+    btnCopyFusion.addEventListener('click', () => {
+      const x1 = (p1.x * 100).toFixed(1);
+      const x2 = ((1 - p2.x) * 100).toFixed(1);
+
+      const fusionText = 
+`-- Xentro Studios Resolve Spline Ease
+StartEase = ${x1}
+EndEase = ${x2}
+BezierP1 = { ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} }
+BezierP2 = { ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} }`;
+
+      copyToClipboard(fusionText, 'Resolve Spline parameters copied!');
+      btnCopyFusionLabel.textContent = 'Copied!';
+      setTimeout(() => { btnCopyFusionLabel.textContent = 'Copy Fusion Spline Modifier'; }, 2000);
+    });
+
+    btnCopyCss.addEventListener('click', () => {
+      const cssStr = cssValDisplay.textContent.trim();
+      copyToClipboard(cssStr, 'CSS cubic-bezier copied!');
+      btnCopyCssLabel.textContent = 'Copied!';
+      setTimeout(() => { btnCopyCssLabel.textContent = 'Copy CSS'; }, 2000);
+    });
+
+    btnDownloadPreset.addEventListener('click', () => {
+      const x1 = p1.x.toFixed(2);
+      const y1 = p1.y.toFixed(2);
+      const x2 = p2.x.toFixed(2);
+      const y2 = p2.y.toFixed(2);
+
+      const xmlPreset = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<PremiereData Version="3">
+  <Tree ObjectRef="1"/>
+  <TreeItem ObjectUID="1">
+    <Name>Xentro_Ease_${Math.round(p1.x*100)}_${Math.round((1-p2.x)*100)}</Name>
+    <Description>Cubic-Bezier Easing (${x1}, ${y1}, ${x2}, ${y2}) by Xentro Studios</Description>
+    <VelocityCurve>
+      <Handle1 x="${x1}" y="${y1}"/>
+      <Handle2 x="${x2}" y="${y2}"/>
+    </VelocityCurve>
+  </TreeItem>
+</PremiereData>`;
+
+      const blob = new Blob([xmlPreset], { type: 'application/xml;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `Xentro_Ease_${Math.round(p1.x*100)}_${Math.round((1-p2.x)*100)}.prfpset`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Premiere Pro preset (.prfpset) downloaded!');
+    });
+
+    updateOutputs();
+    draw();
+    setTimeout(triggerAnimation, 300);
+  </script>
+</body>
+</html>

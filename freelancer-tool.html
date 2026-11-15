@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelancer Tool | Xentro Studios</title>
+
+  <!-- Instant Theme Script to Prevent Screen Flash -->
+  <script>
+    if (localStorage.getItem('xentro_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Background Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.10) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.05) 0px, transparent 45%);
+    }
+    .dark .draftr-bg {
+      background-color: #03050c;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.22) 0px, transparent 60%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.14) 0px, transparent 45%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.12) 0px, transparent 50%);
+    }
+
+    /* Outer Wrapper Card with Distinct Purple Separation */
+    .outer-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(119, 1, 228, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      border-radius: 28px;
+      transition: all 0.25s ease;
+    }
+    .dark .outer-card {
+      background: #0d122e;
+      border: 1px solid rgba(119, 1, 228, 0.38);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 22px 0 rgba(119, 1, 228, 0.18);
+    }
+    .outer-card:hover {
+      border-color: rgba(216, 180, 254, 0.9);
+      box-shadow: 0 14px 30px -4px rgba(119, 1, 228, 0.08);
+    }
+    .dark .outer-card:hover {
+      border-color: rgba(134, 9, 251, 0.65);
+      box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75), 0 0 30px 2px rgba(134, 9, 251, 0.28);
+    }
+
+    /* Floating Item Cards */
+    .floating-pill-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+    }
+    .dark .floating-pill-card {
+      background: #070a1c;
+      border: 1px solid rgba(119, 1, 228, 0.35);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .floating-pill-card:hover {
+      border-color: #C7D2FE;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(119, 1, 228, 0.08);
+    }
+    .dark .floating-pill-card:hover {
+      border-color: #8609fb;
+      box-shadow: 0 6px 18px rgba(134, 9, 251, 0.3);
+    }
+
+    /* Primary Brand Gradient Buttons (#7701e4 to #8609fb) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7701e4 0%, #8609fb 100%);
+      box-shadow: 0 4px 14px 0 rgba(119, 1, 228, 0.35);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #6400c2 0%, #7701e4 100%);
+      box-shadow: 0 6px 22px 0 rgba(134, 9, 251, 0.5);
+    }
+
+    /* Progress Bar */
+    .progress-bar-gradient {
+      background: linear-gradient(90deg, #7701e4 0%, #8609fb 50%, #c084fc 100%);
+      box-shadow: 0 2px 10px rgba(119, 1, 228, 0.45);
+    }
+
+    /* Animated Day/Night Pill Switcher */
+    .theme-toggle-btn {
+      position: relative;
+      width: 68px;
+      height: 32px;
+      border-radius: 9999px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .theme-toggle-btn .sky-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #93c5fd 100%);
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .clouds {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      width: 32px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+    .theme-toggle-btn .clouds::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .theme-toggle-btn .night-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #090d24 0%, #171d3d 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .stars {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-size: 8px;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 12px 6px 0px #fff, 6px 12px 0px #fff;
+    }
+    .theme-toggle-btn .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .dark .theme-toggle-btn {
+      border-color: rgba(119, 1, 228, 0.4);
+    }
+    .dark .theme-toggle-btn .sky-bg {
+      opacity: 0;
+    }
+    .dark .theme-toggle-btn .night-bg {
+      opacity: 1;
+    }
+    .dark .theme-toggle-btn .toggle-thumb {
+      transform: translateX(36px);
+      background: #cbd5e1;
+      box-shadow: inset -2px -2px 0 0 #94a3b8, 0 0 8px rgba(203, 213, 225, 0.4);
+    }
+
+    /* Tooltips */
+    .info-wrap {
+      position: relative;
+    }
+    .info-popover {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      width: 260px;
+      z-index: 70;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .info-wrap:hover .info-popover,
+    .info-wrap:focus-within .info-popover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Range Sliders */
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #e2e8f0;
+      height: 6px;
+      border-radius: 9999px;
+      outline: none;
+    }
+    .dark input[type=range] {
+      background: #070a1c;
+      border: 1px solid rgba(119, 1, 228, 0.3);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #8609fb;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(134, 9, 251, 0.7);
+      border: 2px solid #ffffff;
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #070a1c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2b1f55;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8609fb;
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] dark:text-slate-100 min-h-screen flex flex-col justify-between selection:bg-[#7701e4] selection:text-white antialiased transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/70 dark:border-purple-900/40 bg-white/80 dark:bg-[#070b1e]/85 backdrop-blur-md px-4 sm:px-6 py-4 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="https://xentro-tools.vercel.app/" target="_self" class="flex items-center gap-3.5 select-none group">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-600/30 group-hover:scale-105 transition duration-300">
+          X
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">Xentro</span>
+            <span class="text-xl font-extrabold tracking-tight text-[#8609fb]">Studios</span>
+          </div>
+          <span class="text-xs font-semibold text-[#64748B] dark:text-slate-400 tracking-tight mt-1">Create your own dreams</span>
+        </div>
+      </a>
+
+      <!-- Controls: Back Button & Theme Toggle -->
+      <div class="flex items-center gap-3.5">
+        <a href="https://xentro-tools.vercel.app/" target="_self" class="group flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#131a42] border border-slate-200/90 dark:border-purple-800/60 shadow-sm hover:border-[#7701e4] dark:hover:border-[#8609fb] hover:shadow-md transition-all duration-200">
+          <span class="w-5 h-5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-purple-300 group-hover:bg-[#7701e4] group-hover:text-white flex items-center justify-center transition-colors">
+            <svg class="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-[#c084fc] transition-colors">Back to Tools</span>
+        </a>
+
+        <!-- Animated Day/Night Pill Switcher -->
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <div class="sky-bg"><div class="clouds"></div></div>
+          <div class="night-bg"><div class="stars">✦</div></div>
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Header Block -->
+  <section class="max-w-4xl w-full mx-auto text-center px-4 mt-8 mb-8">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 dark:bg-[#131a42] backdrop-blur border border-purple-100 dark:border-purple-700/60 text-[#7701e4] dark:text-purple-300 text-xs font-bold shadow-sm mb-3">
+      <span class="w-2 h-2 rounded-full bg-[#8609fb] animate-pulse"></span>
+      FREELANCE SUITE
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+      Freelancer Tool
+    </h1>
+    <p class="text-xs sm:text-sm text-[#64748B] dark:text-slate-300 mt-2 max-w-2xl mx-auto font-medium">
+      Quote project margins, format client revisions into timeline markers, and calculate export file sizes.
+    </p>
+
+    <!-- Top Tab Switcher -->
+    <div class="inline-flex flex-wrap justify-center gap-1 p-1 bg-white dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-800/80 rounded-2xl mt-6 shadow-sm select-none">
+      <button type="button" id="tabBtnRate" onclick="switchTab('rate')" class="py-2 px-4 sm:px-5 font-bold rounded-xl btn-gradient text-white shadow-md transition text-xs cursor-pointer">
+        Rate & Margin
+      </button>
+      <button type="button" id="tabBtnFeedback" onclick="switchTab('feedback')" class="py-2 px-4 sm:px-5 font-bold rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">
+        Feedback & Markers
+      </button>
+      <button type="button" id="tabBtnBitrate" onclick="switchTab('bitrate')" class="py-2 px-4 sm:px-5 font-bold rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer">
+        Bitrate & File Size
+      </button>
+    </div>
+  </section>
+
+  <!-- Main Workspace -->
+  <main class="max-w-6xl w-full mx-auto px-4 pb-12 flex-1">
+    
+    <!-- ==================== TAB 1: RATE & MARGIN CALCULATOR (DEFAULT FIRST) ==================== -->
+    <div id="tabContentRate" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Configuration Panels (7 Cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Monthly Financial Baseline -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm">
+                1. Monthly Baseline
+              </span>
+              
+              <!-- Currency Toggle -->
+              <div class="flex items-center p-1 bg-white dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/80 rounded-xl text-xs font-mono-code font-bold shadow-sm">
+                <button type="button" id="curINR" onclick="setCurrency('₹')" class="px-2.5 py-1 rounded-lg btn-gradient text-white transition cursor-pointer">₹ INR</button>
+                <button type="button" id="curUSD" onclick="setCurrency('$')" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer">$ USD</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1.5">
+                <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Target Monthly Take-Home</label>
+                <div class="relative">
+                  <span class="currency-symbol absolute left-3 top-2.5 text-slate-400 dark:text-slate-400 font-mono-code font-bold">₹</span>
+                  <input type="number" id="inTakeHome" value="60000" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-2 pl-7 pr-3 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none transition">
+                </div>
+              </div>
+
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1.5">
+                <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Monthly Overhead & Software</label>
+                <div class="relative">
+                  <span class="currency-symbol absolute left-3 top-2.5 text-slate-400 dark:text-slate-400 font-mono-code font-bold">₹</span>
+                  <input type="number" id="inOverhead" value="5000" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-2 pl-7 pr-3 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none transition">
+                </div>
+              </div>
+
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1.5">
+                <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Billable Editing Days / Mo</label>
+                <input type="number" id="inDays" value="20" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-2 px-3 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none transition">
+              </div>
+
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1.5">
+                <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Timeline Focus Hours / Day</label>
+                <input type="number" id="inHoursDay" value="5" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-2 px-3 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none transition">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Project Scope & Hours -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+                2. Project Scope & Execution
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-300 text-[10px] font-mono-code font-bold border border-purple-200 dark:border-purple-800/60 shadow-sm">
+                Scope Config
+              </span>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1.5">
+                <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Project Complexity</label>
+                <select id="selComplexity" onchange="applyTierPreset()" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-2 px-3 text-[#0F172A] dark:text-white text-xs font-bold outline-none transition cursor-pointer">
+                  <option value="social">Social Reel / Short (Fast Cut, Subtitles)</option>
+                  <option value="youtube" selected>YouTube Retentive (Hooks, B-Roll, SFX)</option>
+                  <option value="commercial">Commercial / Brand Film (Color Grade, Sound Design)</option>
+                </select>
+              </div>
+
+              <!-- Hours Breakdown -->
+              <div class="grid grid-cols-3 gap-2.5">
+                <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-2.5 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1">
+                  <label class="text-[10px] font-bold text-purple-900/80 dark:text-slate-300">Rough Assembly</label>
+                  <div class="relative">
+                    <input type="number" id="inHrsAssembly" value="6" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-1.5 pl-2.5 pr-8 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none">
+                    <span class="absolute right-2 top-2 text-[10px] text-slate-400 dark:text-slate-400 font-mono-code font-bold">hrs</span>
+                  </div>
+                </div>
+                <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-2.5 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1">
+                  <label class="text-[10px] font-bold text-purple-900/80 dark:text-slate-300">Sound Polish</label>
+                  <div class="relative">
+                    <input type="number" id="inHrsSound" value="3" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-1.5 pl-2.5 pr-8 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none">
+                    <span class="absolute right-2 top-2 text-[10px] text-slate-400 dark:text-slate-400 font-mono-code font-bold">hrs</span>
+                  </div>
+                </div>
+                <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-2.5 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1">
+                  <label class="text-[10px] font-bold text-purple-900/80 dark:text-slate-300">Grade & Motion</label>
+                  <div class="relative">
+                    <input type="number" id="inHrsGrade" value="3" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-1.5 pl-2.5 pr-8 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none">
+                    <span class="absolute right-2 top-2 text-[10px] text-slate-400 dark:text-slate-400 font-mono-code font-bold">hrs</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Revisions & Scope -->
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1">
+                  <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Included Revisions</label>
+                  <input type="number" id="inRevRounds" value="2" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-1.5 px-3 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none">
+                </div>
+                <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm space-y-1">
+                  <label class="text-[11px] font-bold text-purple-900/80 dark:text-slate-300">Hours / Revision</label>
+                  <div class="relative">
+                    <input type="number" id="inHrsPerRev" value="2" class="w-full bg-[#F8FAFC] dark:bg-[#0d122e] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] focus:bg-white dark:focus:bg-[#131a42] rounded-xl py-1.5 pl-3 pr-8 text-[#0F172A] dark:text-white font-mono-code text-xs font-bold outline-none">
+                    <span class="absolute right-2.5 top-2 text-[10px] text-slate-400 dark:text-slate-400 font-mono-code font-bold">hrs</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rush Toggle -->
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-3.5 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm flex items-center justify-between select-none">
+                <div>
+                  <div class="font-extrabold text-[#0F172A] dark:text-white text-xs">Rush Turnaround (&lt; 48 hrs)</div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">+30% urgency surcharge</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="chkRush" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 dark:bg-[#131a42] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#7701e4]"></div>
+                </label>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Output Card (5 Cols) -->
+      <div class="lg:col-span-5 outer-card p-4 sm:p-5">
+        <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#EEF2FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-5 flex flex-col gap-5 shadow-sm">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+              RECOMMENDED QUOTE
+            </span>
+            <span id="badgeMargin" class="text-[10px] font-mono-code px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-[#070a1c] text-[#7701e4] dark:text-[#c084fc] border border-purple-200 dark:border-purple-800/80 font-bold shadow-sm">Safe Margin</span>
+          </div>
+
+          <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-5 rounded-2xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <div class="flex items-baseline gap-1 text-[#0F172A] dark:text-white">
+              <span class="currency-symbol text-2xl font-bold font-mono-code text-[#7701e4] dark:text-[#c084fc]">₹</span>
+              <span id="outQuote" class="text-4xl sm:text-5xl font-black tracking-tight font-mono-code">12,480</span>
+            </div>
+            <p class="text-xs text-[#64748B] dark:text-slate-400 mt-1.5 font-medium">Covers baseline income, overhead, and revision buffers.</p>
+          </div>
+
+          <div class="space-y-2.5 text-xs font-mono-code">
+            <div class="flex justify-between items-center p-3 bg-white/90 dark:bg-[#070a1c] backdrop-blur rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+              <span class="text-slate-500 dark:text-slate-400 font-sans font-bold">Effective Hourly Floor:</span>
+              <span id="outHourly" class="text-[#7701e4] dark:text-[#c084fc] font-bold">₹650/hr</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-white/90 dark:bg-[#070a1c] backdrop-blur rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+              <span class="text-slate-500 dark:text-slate-400 font-sans font-bold">Total Project Hours:</span>
+              <span id="outTotalHours" class="text-slate-800 dark:text-slate-200 font-bold">16 hrs</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-white/90 dark:bg-[#070a1c] backdrop-blur rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+              <span class="text-slate-500 dark:text-slate-400 font-sans font-bold">Revision Buffer:</span>
+              <span id="outRevHours" class="text-[#7701e4] dark:text-[#c084fc] font-bold">4 hrs (2 rounds)</span>
+            </div>
+          </div>
+
+          <button type="button" onclick="copyQuoteBreakdown()" class="w-full py-3.5 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="lblCopyQuote">Copy Quote Breakdown</span>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: CLIENT FEEDBACK & TIMECODE FORMATTER ==================== -->
+    <div id="tabContentFeedback" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Input & Settings (6 Cols) -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <!-- Panel 1: Raw Client Revisions -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm">
+                RAW CLIENT REVISIONS
+              </span>
+              
+              <!-- FPS Selector with Info Tooltip -->
+              <div class="flex items-center gap-2 text-xs">
+                <div class="info-wrap">
+                  <span class="text-slate-500 dark:text-slate-400 font-mono-code font-bold text-[11px] cursor-help flex items-center gap-1">
+                    FPS: <span class="text-[#8609fb]">ⓘ</span>
+                  </span>
+                  <div class="info-popover bg-white dark:bg-[#0d122e] p-3 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left text-slate-700 dark:text-slate-300">
+                    <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-0.5">Timeline FPS Sync</div>
+                    <p class="text-[11px] leading-snug">Calculates frame-accuracy (HH:MM:SS:FF) for NLE markers.</p>
+                  </div>
+                </div>
+
+                <select id="selFPS" onchange="parseFeedback()" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white text-xs font-mono-code font-bold py-1 px-2.5 rounded-xl border border-purple-200 dark:border-purple-800/80 shadow-sm outline-none cursor-pointer">
+                  <option value="23.976">23.98 fps</option>
+                  <option value="24">24 fps (Cinema)</option>
+                  <option value="25" selected>25 fps (PAL / UK)</option>
+                  <option value="29.97">29.97 fps</option>
+                  <option value="30">30 fps (Web / Social)</option>
+                  <option value="60">60 fps (Gaming)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Notes Textarea -->
+            <div class="space-y-2">
+              <textarea id="rawFeedbackInput" rows="7" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/70 focus:border-[#7701e4] focus:ring-4 focus:ring-[#7701e4]/10 rounded-2xl p-4 text-xs text-[#0F172A] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none transition leading-relaxed resize-y font-mono-code shadow-sm" placeholder="Paste unformatted client email or message here...
+Examples:
+1:29 lower the background music volume by -3dB
+1.34 color grade looks too green on the speaker's face
+1-64 cut that awkward breath/pause between sentences
+6'67 typo in the lower third caption: change 'recieve'
+45s add sound effect when logo animates">1:29 lower the background music volume by -3dB
+1.34 color grade looks too green on the speaker's face
+1-64 cut that awkward breath/pause between sentences
+6'67 typo in the lower third caption: change 'recieve'
+45s add sound effect when logo animates
+45s export in 4K resolution with clean audio master</textarea>
+              
+              <div class="flex items-center justify-between text-xs font-mono-code text-slate-500 dark:text-slate-400 px-1">
+                <span>Detected Revisions: <strong id="lblDetectedCount" class="text-[#7701e4] dark:text-[#c084fc]">6</strong></span>
+                <button type="button" onclick="clearFeedback()" class="text-slate-400 dark:text-slate-500 hover:text-purple-600 dark:hover:text-purple-300 transition cursor-pointer text-xs font-bold font-sans">Clear Notes</button>
+              </div>
+            </div>
+
+            <!-- Format Warning -->
+            <div id="formatWarningPanel" class="hidden p-3 rounded-2xl bg-purple-50/80 dark:bg-[#070a1c] border border-purple-200/90 dark:border-purple-800/70 text-[11px] text-purple-900 dark:text-purple-300 flex items-start gap-2.5 shadow-sm">
+              <span class="text-[#8609fb] font-bold text-sm leading-none mt-0.5">⚠️</span>
+              <div class="flex-1 leading-snug">
+                <span class="font-bold">Missing or unrecognized timecodes:</span> Unrecognized lines are grouped under <code class="font-mono-code bg-white dark:bg-[#131a42] px-1 rounded border border-purple-200 dark:border-purple-800 font-bold">GENERAL</code>. Formats supported: <strong class="font-mono-code text-purple-950 dark:text-white">1:29</strong>, <strong class="font-mono-code text-purple-950 dark:text-white">1.34</strong>, <strong class="font-mono-code text-purple-950 dark:text-white">1-64</strong>, <strong class="font-mono-code text-purple-950 dark:text-white">6'67</strong>, or <strong class="font-mono-code text-purple-950 dark:text-white">45s</strong>.
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button type="button" id="btnLoadRevisions" onclick="parseFeedback(true)" class="w-full py-2.5 px-3 btn-gradient text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span>Parse & Load Revisions</span>
+              </button>
+              <button type="button" onclick="loadSampleFeedback()" class="w-full py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Load Sample Notes</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Panel 2: Export & Timeline Settings -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+                EXPORT & TIMELINE SETTINGS
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-300 text-[10px] font-mono-code font-bold border border-purple-200 dark:border-purple-800/60 shadow-sm">
+                Sync Engine
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-2.5 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+                <label class="block text-[10px] font-bold text-purple-900/80 dark:text-slate-400 uppercase mb-1">Project Ref</label>
+                <input id="client-name-input" type="text" value="Client Cut V1" placeholder="e.g. Commercial V2" class="w-full bg-transparent text-[#0F172A] dark:text-white text-xs outline-none font-bold" />
+              </div>
+              <div class="bg-white/95 dark:bg-[#070a1c] backdrop-blur p-2.5 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm flex flex-col justify-center">
+                <label class="block text-[10px] font-bold text-purple-900/80 dark:text-slate-400 uppercase mb-1">Active Format</label>
+                <span class="text-xs font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc]">SMPTE TC Synced</span>
+              </div>
+            </div>
+
+            <!-- NLE Workflow Guides -->
+            <div class="pt-2 border-t border-purple-100 dark:border-purple-800/50 space-y-2">
+              <div class="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-extrabold">NLE Workflow Guides</div>
+              <div class="grid grid-cols-3 gap-2">
+                
+                <!-- Premiere -->
+                <div class="info-wrap">
+                  <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#7701e4]"></span>
+                    <span>Premiere</span>
+                    <span class="text-[10px] text-[#7701e4] dark:text-purple-300 font-mono-code">ⓘ</span>
+                  </button>
+                  <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                    <div class="text-[11px] font-bold text-[#7701e4] dark:text-purple-300 uppercase mb-1">Premiere Markers</div>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">Download the <code class="text-[#7701e4] dark:text-purple-300 font-mono-code bg-purple-50 dark:bg-[#131a42] px-1 rounded">.csv</code> &rarr; In Premiere: File &rarr; Import &rarr; choose CSV &rarr; right-click in Markers panel to overlay on active sequence.</p>
+                  </div>
+                </div>
+
+                <!-- DaVinci -->
+                <div class="info-wrap">
+                  <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#8609fb]"></span>
+                    <span>DaVinci</span>
+                    <span class="text-[10px] text-[#8609fb] dark:text-purple-300 font-mono-code">ⓘ</span>
+                  </button>
+                  <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                    <div class="text-[11px] font-bold text-[#8609fb] dark:text-purple-300 uppercase mb-1">DaVinci Markers</div>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">Download <code class="text-[#8609fb] dark:text-purple-300 font-mono-code bg-purple-50 dark:bg-[#131a42] px-1 rounded">.csv</code> &rarr; Right-click timeline in Edit Page &rarr; Timelines &rarr; Import &rarr; Timeline Markers from EDL/CSV.</p>
+                  </div>
+                </div>
+
+                <!-- After Effects -->
+                <div class="info-wrap">
+                  <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#c084fc]"></span>
+                    <span>After Effects</span>
+                    <span class="text-[10px] text-[#7701e4] dark:text-[#c084fc] font-mono-code">ⓘ</span>
+                  </button>
+                  <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                    <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-1">AE Marker Script</div>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">Click <em>AE Script (.jsx)</em> &rarr; In After Effects: File &rarr; Scripts &rarr; Run Script File to place markers with notes automatically.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Export Buttons inside panel -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-purple-100 dark:border-purple-800/50">
+              <button type="button" onclick="copyChecklist()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+                <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="lblCopyChecklist">Copy Checklist</span>
+              </button>
+
+              <button type="button" onclick="downloadCSVMarkers()" class="py-2.5 px-3 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+                <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Markers (.CSV)</span>
+              </button>
+
+              <button type="button" onclick="downloadAEScript()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+                <svg class="w-3.5 h-3.5 text-[#8609fb] pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                <span>AE Script (.jsx)</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Progress & Chronological Punch-List (6 Cols) -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <!-- Panel 3: Revision Progress & Status Filters -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-3.5 shadow-sm">
+            
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+                REVISION PROGRESS
+              </span>
+              <span id="lblProgressStatus" class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950/80 text-[#7701e4] dark:text-[#c084fc] text-[11px] font-bold font-mono-code border border-purple-200 dark:border-purple-800/60 shadow-sm">
+                0 / 0 Done
+              </span>
+            </div>
+
+            <!-- Two-Tone Purple Gradient Progress Bar Track -->
+            <div class="w-full h-3.5 bg-white dark:bg-[#070a1c] rounded-full overflow-hidden p-0.5 border border-purple-200 dark:border-purple-800/70 shadow-inner">
+              <div id="progress-bar" style="width: 0%;" class="h-full progress-bar-gradient rounded-full transition-all duration-300"></div>
+            </div>
+
+            <!-- Filter Controls inside Panel -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div class="flex items-center gap-1.5" id="filter-group">
+                <span class="text-purple-900/70 dark:text-slate-400 text-[11px] font-bold">Filter:</span>
+                <button type="button" class="filter-btn px-3 py-1 rounded-full btn-gradient text-white text-[11px] font-bold cursor-pointer transition shadow-sm" data-filter="all">All</button>
+                <button type="button" class="filter-btn px-3 py-1 rounded-full bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] text-slate-700 dark:text-slate-300 text-[11px] font-bold border border-purple-200 dark:border-purple-800/80 cursor-pointer transition shadow-sm" data-filter="pending">Pending</button>
+                <button type="button" class="filter-btn px-3 py-1 rounded-full bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] text-slate-700 dark:text-slate-300 text-[11px] font-bold border border-purple-200 dark:border-purple-800/80 cursor-pointer transition shadow-sm" data-filter="done">Completed</button>
+              </div>
+              <button type="button" onclick="markAllCompleted()" class="text-[#7701e4] dark:text-[#c084fc] hover:underline font-extrabold text-[11px] cursor-pointer transition bg-white dark:bg-[#070a1c] px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800/70 shadow-sm">
+                Mark All as Complete
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Panel 4: Chronological Punch-List -->
+        <div class="outer-card p-4 sm:p-5">
+          <div class="w-full rounded-2xl bg-gradient-to-br from-[#F8FAFC] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+            
+            <div class="flex items-center justify-between pb-1">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-purple-800/80 shadow-sm">
+                  CHRONOLOGICAL PUNCH-LIST
+                </span>
+                <span id="lblItemsCountBadge" class="px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-[#c084fc] text-[10px] font-mono-code font-bold border border-purple-200 dark:border-purple-800/60 shadow-sm">0 Items</span>
+              </div>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold hidden sm:inline">Click timecode to copy</span>
+            </div>
+
+            <!-- Dynamic List Container -->
+            <div id="checklistContainer" class="max-h-[460px] overflow-y-auto space-y-2.5 pr-1">
+              <!-- Rendered via JavaScript -->
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================== TAB 3: BITRATE & FILE SIZE CALCULATOR ==================== -->
+    <div id="tabContentBitrate" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: Controls & Parameters -->
+      <div class="lg:col-span-6 space-y-6">
+
+        <!-- PANEL 1: TIMELINE DURATION -->
+        <div class="outer-card p-5 sm:p-6 shadow-xl transition">
+          <div class="flex items-center justify-between mb-3.5">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">TIMELINE DURATION</span>
+            <span id="total-duration-badge" class="text-[11px] font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc] bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/70 px-2.5 py-0.5 rounded-lg">00:01:00 (60s)</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 mb-3.5">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Hours</label>
+              <input id="dur-hours" type="number" min="0" max="99" value="0" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-center text-sm font-bold font-mono-code text-slate-900 dark:text-white outline-none transition" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Minutes</label>
+              <input id="dur-mins" type="number" min="0" max="59" value="1" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-center text-sm font-bold font-mono-code text-slate-900 dark:text-white outline-none transition" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Seconds</label>
+              <input id="dur-secs" type="number" min="0" max="59" value="0" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-center text-sm font-bold font-mono-code text-slate-900 dark:text-white outline-none transition" />
+            </div>
+          </div>
+
+          <!-- Quick Preset Buttons -->
+          <div class="grid grid-cols-4 gap-2 pt-3 border-t border-slate-100 dark:border-purple-900/40">
+            <button type="button" class="preset-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] hover:bg-purple-50 dark:hover:bg-purple-950/60 border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-center cursor-pointer" data-h="0" data-m="0" data-s="30">30s Reel</button>
+            <button type="button" class="preset-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] hover:bg-purple-50 dark:hover:bg-purple-950/60 border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-center cursor-pointer" data-h="0" data-m="1" data-s="0">60s Short</button>
+            <button type="button" class="preset-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] hover:bg-purple-50 dark:hover:bg-purple-950/60 border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-center cursor-pointer" data-h="0" data-m="5" data-s="0">5m Video</button>
+            <button type="button" class="preset-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] hover:bg-purple-50 dark:hover:bg-purple-950/60 border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-center cursor-pointer" data-h="0" data-m="15" data-s="0">15m Long</button>
+          </div>
+        </div>
+
+        <!-- PANEL 2: VIDEO CODEC & RESOLUTION -->
+        <div class="outer-card p-5 sm:p-6 shadow-xl transition space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">VIDEO CODEC & RESOLUTION</span>
+            <span id="codec-type-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-[#7701e4] dark:text-[#c084fc] border border-purple-200 dark:border-purple-800/70">Interframe / Web</span>
+          </div>
+
+          <!-- Codec Selection Dropdown -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Export Codec / Format</label>
+            <select id="codec-select" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer">
+              <option value="h264">H.264 / AVC (.mp4 - Standard Web & Social)</option>
+              <option value="h265">H.265 / HEVC (.mp4 - High Efficiency)</option>
+              <option value="prores_422">Apple ProRes 422 (Broadcast Master)</option>
+              <option value="prores_hq">Apple ProRes 422 HQ (High Quality Master)</option>
+              <option value="prores_4444">Apple ProRes 4444 (VFX / Alpha Channel)</option>
+              <option value="dnxhr_hq">Avid DNxHR HQ (Post-Production Master)</option>
+            </select>
+          </div>
+
+          <!-- Resolution & Frame Rate Grid -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Resolution</label>
+              <select id="resolution-select" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer">
+                <option value="1080p">1080p FHD (1920x1080 / 1080x1920)</option>
+                <option value="4k">4K UHD (3840x2160 / 2160x3840)</option>
+                <option value="8k">8K UHD (7680x4320)</option>
+                <option value="720p">720p HD (1280x720)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Frame Rate (FPS)</label>
+              <select id="fps-select" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] dark:focus:border-[#8609fb] rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer">
+                <option value="24">24 / 23.976 fps (Cinematic)</option>
+                <option value="30" selected>30 / 29.97 fps (Social / Web)</option>
+                <option value="60">60 / 59.94 fps (High Motion)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Video Bitrate Controls -->
+          <div class="pt-3 border-t border-slate-100 dark:border-purple-900/40">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-[11px] font-bold text-slate-600 dark:text-slate-400">Video Bitrate</label>
+              <div class="flex items-center gap-1.5">
+                <input id="bitrate-number" type="number" min="0.5" max="3000" step="0.5" value="16" class="w-20 bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-lg px-2 py-0.5 text-right text-xs font-bold font-mono-code text-[#7701e4] dark:text-[#c084fc] outline-none" />
+                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 font-mono-code">Mbps</span>
+              </div>
+            </div>
+            <input id="bitrate-slider" type="range" min="1" max="100" step="0.5" value="16" class="w-full cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 font-mono-code mt-1.5">
+              <span>1 Mbps</span>
+              <span id="slider-max-label">100 Mbps (Variable)</span>
+            </div>
+          </div>
+
+          <!-- Audio Bitrate Controls -->
+          <div class="pt-3 border-t border-slate-100 dark:border-purple-900/40">
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-2">Audio Bitrate / Track Quality</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button type="button" class="audio-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 transition text-center cursor-pointer" data-kbps="128">128 kbps <span class="text-[9px] block text-slate-400 dark:text-slate-500 font-normal">Draft</span></button>
+              <button type="button" class="audio-btn py-1.5 px-2 btn-gradient text-white border border-transparent rounded-lg text-[11px] font-bold transition text-center cursor-pointer" data-kbps="192">192 kbps <span class="text-[9px] block text-purple-100 font-normal">Standard</span></button>
+              <button type="button" class="audio-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 transition text-center cursor-pointer" data-kbps="320">320 kbps <span class="text-[9px] block text-slate-400 dark:text-slate-500 font-normal">Hi-Fi</span></button>
+              <button type="button" class="audio-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 transition text-center cursor-pointer" data-kbps="1411">1411 kbps <span class="text-[9px] block text-slate-400 dark:text-slate-500 font-normal">PCM Wav</span></button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Results Dashboard -->
+      <div class="lg:col-span-6 space-y-6">
+
+        <!-- HERO STAT CARD -->
+        <div class="outer-card p-6 shadow-2xl relative overflow-hidden">
+          <div class="absolute -right-12 -top-12 w-40 h-40 bg-[#8609fb]/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">ESTIMATED EXPORT FILE SIZE</span>
+            <span class="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-700/50">Live Output</span>
+          </div>
+
+          <!-- Big Stat Digits -->
+          <div class="flex items-baseline gap-3 my-2">
+            <span id="output-mb" class="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white font-mono-code tracking-tight">121.4</span>
+            <span class="text-xl font-extrabold text-[#7701e4] dark:text-[#c084fc]">MB</span>
+            <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 font-mono-code">/ <span id="output-gb" class="text-slate-800 dark:text-slate-200 font-bold">0.12</span> GB</span>
+          </div>
+
+          <!-- Data Breakdown Bar -->
+          <div class="mt-4 pt-4 border-t border-slate-100 dark:border-purple-900/40 space-y-2 text-xs">
+            <div class="flex justify-between text-slate-500 dark:text-slate-400">
+              <span>Video Stream: <strong id="breakdown-video" class="text-slate-800 dark:text-slate-200 font-mono-code">120.0 MB</strong></span>
+              <span>Audio Stream: <strong id="breakdown-audio" class="text-slate-800 dark:text-slate-200 font-mono-code">1.4 MB</strong></span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 dark:bg-[#070a1c] rounded-full overflow-hidden flex">
+              <div id="bar-video" style="width: 98%;" class="h-full bg-gradient-to-r from-[#7701e4] to-[#8609fb]"></div>
+              <div id="bar-audio" style="width: 2%;" class="h-full bg-emerald-500 dark:bg-emerald-400"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+              <span>+5% Delivery Safety Buffer:</span>
+              <span id="output-buffer" class="font-bold text-slate-700 dark:text-slate-300 font-mono-code">~127.5 MB</span>
+            </div>
+          </div>
+
+          <!-- Quick Copy Action Button -->
+          <button id="btn-copy-summary" type="button" class="w-full mt-4 py-3 px-3 rounded-xl btn-gradient text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span id="copy-btn-text">Copy Export Specs for Client Brief</span>
+          </button>
+        </div>
+
+        <!-- REVERSE BITRATE TARGETER (Solve for File Size Limit) -->
+        <div class="outer-card p-5 sm:p-6 shadow-xl transition">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">REVERSE BITRATE TARGETER</span>
+            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500">Solve for Client File Caps</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Targeting an upload limit? Punch this bitrate into Premiere or Resolve:</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Target Max Size (MB)</label>
+              <div class="flex items-center gap-1.5">
+                <input id="target-cap-input" type="number" min="1" max="100000" value="25" class="w-full bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/80 focus:border-[#7701e4] rounded-xl px-3 py-2 text-sm font-bold font-mono-code text-slate-900 dark:text-white outline-none" />
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <button type="button" class="cap-quick-btn text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer" data-mb="25">25MB (Discord)</button>
+                <button type="button" class="cap-quick-btn text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer" data-mb="64">64MB (WhatsApp)</button>
+                <button type="button" class="cap-quick-btn text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer" data-mb="500">500MB</button>
+              </div>
+            </div>
+
+            <div class="bg-purple-50/60 dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/60 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-0.5">Recommended Video Bitrate</span>
+              <div class="flex items-baseline justify-center gap-1">
+                <span id="reverse-bitrate-out" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono-code">3.14</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-mono-code">Mbps</span>
+              </div>
+              <span class="text-[10px] text-slate-500 block mt-0.5">With audio track accounted</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- UPLOAD TIME ESTIMATOR -->
+        <div class="outer-card p-5 sm:p-6 shadow-xl transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">UPLOAD DURATION ESTIMATE</span>
+            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500">Cloud / Client Transfer</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+            <div class="bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-900/50 p-2.5 rounded-xl">
+              <span class="text-[10px] font-bold text-slate-500 block">4G / 5G Mobile</span>
+              <span class="text-[11px] font-semibold text-slate-400 block mb-1">25 Mbps</span>
+              <span id="time-25mbps" class="text-xs font-extrabold font-mono-code text-slate-900 dark:text-white">39s</span>
+            </div>
+            <div class="bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-900/50 p-2.5 rounded-xl">
+              <span class="text-[10px] font-bold text-slate-500 block">Home Wi-Fi</span>
+              <span class="text-[11px] font-semibold text-slate-400 block mb-1">100 Mbps</span>
+              <span id="time-100mbps" class="text-xs font-extrabold font-mono-code text-slate-900 dark:text-white">10s</span>
+            </div>
+            <div class="bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-900/50 p-2.5 rounded-xl">
+              <span class="text-[10px] font-bold text-slate-500 block">Studio Fiber</span>
+              <span class="text-[11px] font-semibold text-slate-400 block mb-1">300 Mbps</span>
+              <span id="time-300mbps" class="text-xs font-extrabold font-mono-code text-slate-900 dark:text-white">3s</span>
+            </div>
+            <div class="bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-900/50 p-2.5 rounded-xl">
+              <span class="text-[10px] font-bold text-slate-500 block">Gigabit Fiber</span>
+              <span class="text-[11px] font-semibold text-slate-400 block mb-1">1000 Mbps</span>
+              <span id="time-1000mbps" class="text-xs font-extrabold font-mono-code text-slate-900 dark:text-white">&lt;1s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLATFORM SWEET-SPOT GUIDES -->
+        <div class="outer-card p-5 shadow-xl transition">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 block mb-2.5">RECOMMENDED PLATFORM BITRATES</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+            <button type="button" class="platform-chip p-2.5 rounded-xl bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] text-left cursor-pointer transition" data-rate="15">
+              <span class="font-bold text-slate-900 dark:text-white block text-[11px]">IG Reels & Stories</span>
+              <span class="text-[10px] text-[#7701e4] dark:text-[#c084fc] font-mono-code font-bold">15 Mbps (1080p)</span>
+            </button>
+            <button type="button" class="platform-chip p-2.5 rounded-xl bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] text-left cursor-pointer transition" data-rate="12">
+              <span class="font-bold text-slate-900 dark:text-white block text-[11px]">TikTok & Shorts</span>
+              <span class="text-[10px] text-[#7701e4] dark:text-[#c084fc] font-mono-code font-bold">10-12 Mbps (1080p)</span>
+            </button>
+            <button type="button" class="platform-chip p-2.5 rounded-xl bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200/90 dark:border-purple-800/70 hover:border-[#7701e4] dark:hover:border-[#8609fb] text-left cursor-pointer transition" data-rate="45">
+              <span class="font-bold text-slate-900 dark:text-white block text-[11px]">YouTube 4K UHD</span>
+              <span class="text-[10px] text-[#7701e4] dark:text-[#c084fc] font-mono-code font-bold">45-55 Mbps (30fps)</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Sticky Bottom Community Callout -->
+  <footer class="max-w-6xl w-full mx-auto px-4 pb-8">
+    <div class="outer-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-purple-500/20">
+          X
+        </div>
+        <div>
+          <h4 class="text-xs font-extrabold text-[#0F172A] dark:text-white">Xentro Editor Council</h4>
+          <p class="text-[11px] text-[#64748B] dark:text-slate-400 font-medium">Join 500+ video editors sharing motion presets, project critiques, and freelance tips.</p>
+        </div>
+      </div>
+
+      <a href="https://chat.whatsapp.com/JRh8GHhmmwk9DzIK13NjHy" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-5 py-2.5 btn-gradient text-white font-bold text-xs rounded-xl shadow-md transition text-center shrink-0">
+        Join Free Community &rarr;
+      </a>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-white/95 dark:bg-[#0d122e] backdrop-blur-md border border-purple-100 dark:border-purple-700/60 text-[#0F172A] dark:text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb]"></span>
+    <span id="toastMsg">Action complete</span>
+  </div>
+
+  <!-- JavaScript Engine -->
+  <script>
+    let currentCurrency = '₹';
+    let currentTab = 'rate'; // Default to Rate & Margin first
+    let currentFilter = 'all';
+    let parsedTasks = [];
+
+    // Cache user entries per currency so values are preserved when switching
+    const currencyValues = {
+      '₹': { takeHome: 60000, overhead: 5000 },
+      '$': { takeHome: 3500, overhead: 250 }
+    };
+
+    // Dark Mode Theme Toggle Logic
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('xentro_theme', isDark ? 'dark' : 'light');
+      showToast(isDark ? 'Dark theme enabled' : 'Light theme enabled');
+    }
+
+    // Tab Navigation (3 Tabs)
+    function switchTab(tab) {
+      currentTab = tab;
+      const activeCls = 'py-2 px-4 sm:px-5 font-bold rounded-xl btn-gradient text-white shadow-md transition text-xs cursor-pointer';
+      const inactiveCls = 'py-2 px-4 sm:px-5 font-bold rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition text-xs cursor-pointer';
+
+      const tabs = {
+        rate: { btn: document.getElementById('tabBtnRate'), panel: document.getElementById('tabContentRate') },
+        feedback: { btn: document.getElementById('tabBtnFeedback'), panel: document.getElementById('tabContentFeedback') },
+        bitrate: { btn: document.getElementById('tabBtnBitrate'), panel: document.getElementById('tabContentBitrate') }
+      };
+
+      Object.keys(tabs).forEach(key => {
+        if (key === tab) {
+          tabs[key].btn.className = activeCls;
+          tabs[key].panel.classList.remove('hidden');
+        } else {
+          tabs[key].btn.className = inactiveCls;
+          tabs[key].panel.classList.add('hidden');
+        }
+      });
+
+      if (tab === 'rate') calculateRate();
+      else if (tab === 'feedback') parseFeedback();
+      else if (tab === 'bitrate') calculateBitrate();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2000);
+    }
+
+    function copyToClipboard(text, msg) {
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(msg);
+    }
+
+    // ==================== TAB 1 ENGINE ====================
+    function setCurrency(cur) {
+      currencyValues[currentCurrency].takeHome = parseFloat(document.getElementById('inTakeHome').value) || 0;
+      currencyValues[currentCurrency].overhead = parseFloat(document.getElementById('inOverhead').value) || 0;
+
+      currentCurrency = cur;
+      document.querySelectorAll('.currency-symbol').forEach(el => el.textContent = cur);
+      const curINR = document.getElementById('curINR');
+      const curUSD = document.getElementById('curUSD');
+
+      if (cur === '₹') {
+        curINR.className = 'px-2.5 py-1 rounded-lg btn-gradient text-white transition cursor-pointer';
+        curUSD.className = 'px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+      } else {
+        curUSD.className = 'px-2.5 py-1 rounded-lg btn-gradient text-white transition cursor-pointer';
+        curINR.className = 'px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+      }
+
+      document.getElementById('inTakeHome').value = currencyValues[cur].takeHome;
+      document.getElementById('inOverhead').value = currencyValues[cur].overhead;
+
+      calculateRate();
+    }
+
+    function applyTierPreset() {
+      const tier = document.getElementById('selComplexity').value;
+      const inAssembly = document.getElementById('inHrsAssembly');
+      const inSound = document.getElementById('inHrsSound');
+      const inGrade = document.getElementById('inHrsGrade');
+      const inRevs = document.getElementById('inRevRounds');
+      const inRevHrs = document.getElementById('inHrsPerRev');
+
+      if (tier === 'social') {
+        inAssembly.value = 3; inSound.value = 1.5; inGrade.value = 1.5; inRevs.value = 2; inRevHrs.value = 1;
+      } else if (tier === 'youtube') {
+        inAssembly.value = 6; inSound.value = 3; inGrade.value = 3; inRevs.value = 2; inRevHrs.value = 2;
+      } else if (tier === 'commercial') {
+        inAssembly.value = 12; inSound.value = 6; inGrade.value = 6; inRevs.value = 3; inRevHrs.value = 3;
+      }
+      calculateRate();
+    }
+
+    function calculateRate() {
+      const takeHome = parseFloat(document.getElementById('inTakeHome').value) || 0;
+      const overhead = parseFloat(document.getElementById('inOverhead').value) || 0;
+      const days = parseFloat(document.getElementById('inDays').value) || 1;
+      const hoursPerDay = parseFloat(document.getElementById('inHoursDay').value) || 1;
+
+      currencyValues[currentCurrency].takeHome = takeHome;
+      currencyValues[currentCurrency].overhead = overhead;
+
+      const monthlyTarget = takeHome + overhead;
+      const monthlyBillableHours = Math.max(1, days * hoursPerDay);
+      const hourlyFloor = monthlyTarget / monthlyBillableHours;
+
+      const hAssembly = parseFloat(document.getElementById('inHrsAssembly').value) || 0;
+      const hSound = parseFloat(document.getElementById('inHrsSound').value) || 0;
+      const hGrade = parseFloat(document.getElementById('inHrsGrade').value) || 0;
+      const revRounds = parseFloat(document.getElementById('inRevRounds').value) || 0;
+      const hPerRev = parseFloat(document.getElementById('inHrsPerRev').value) || 0;
+      const isRush = document.getElementById('chkRush').checked;
+
+      const baseWorkHours = hAssembly + hSound + hGrade;
+      const revisionHours = revRounds * hPerRev;
+      const totalHours = baseWorkHours + revisionHours;
+
+      let quote = totalHours * hourlyFloor;
+      if (isRush) quote *= 1.30;
+
+      document.getElementById('outQuote').textContent = Math.round(quote).toLocaleString();
+      document.getElementById('outHourly').textContent = `${currentCurrency}${Math.round(hourlyFloor)}/hr`;
+      document.getElementById('outTotalHours').textContent = `${totalHours} hrs`;
+      document.getElementById('outRevHours').textContent = `${revisionHours} hrs (${revRounds} rounds)`;
+
+      const badge = document.getElementById('badgeMargin');
+      if (hourlyFloor > (currentCurrency === '₹' ? 600 : 25)) {
+        badge.textContent = 'Safe Margin';
+        badge.className = 'text-[10px] font-mono-code px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-[#070a1c] text-[#7701e4] dark:text-[#c084fc] border border-purple-200 dark:border-purple-800/80 font-bold shadow-sm';
+      } else {
+        badge.textContent = 'Tight Margin';
+        badge.className = 'text-[10px] font-mono-code px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60 font-bold shadow-sm';
+      }
+    }
+
+    function copyQuoteBreakdown() {
+      const quote = document.getElementById('outQuote').textContent;
+      const hours = document.getElementById('outTotalHours').textContent;
+      const revs = document.getElementById('outRevHours').textContent;
+      const tier = document.getElementById('selComplexity').options[document.getElementById('selComplexity').selectedIndex].text;
+      const isRush = document.getElementById('chkRush').checked ? 'Yes (+30%)' : 'No';
+
+      const breakdown = 
+`PROJECT ESTIMATE & QUOTE
+Scope: ${tier}
+Total Investment: ${currentCurrency}${quote}
+Estimated Timeline: ${hours}
+Revisions Included: ${revs}
+Rush Turnaround: ${isRush}
+Prepared via Xentro Studios`;
+
+      copyToClipboard(breakdown, 'Quote breakdown copied to clipboard!');
+      const lbl = document.getElementById('lblCopyQuote');
+      lbl.textContent = 'Copied!';
+      setTimeout(() => { lbl.textContent = 'Copy Quote Breakdown'; }, 2000);
+    }
+
+    ['inTakeHome', 'inOverhead', 'inDays', 'inHoursDay', 'inHrsAssembly', 'inHrsSound', 'inHrsGrade', 'inRevRounds', 'inHrsPerRev'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculateRate);
+    });
+    document.getElementById('chkRush').addEventListener('change', calculateRate);
+
+    // ==================== TAB 2 ENGINE ====================
+    function detectCategory(text) {
+      const lower = text.toLowerCase();
+      if (/text|title|font|typo|subtitle|caption|lower third|spelling|graphic|logo/.test(lower)) {
+        return { name: 'Graphics/Text', color: 'bg-purple-50 dark:bg-[#070a1c] text-[#7701e4] dark:text-[#c084fc] border-purple-200 dark:border-purple-800/80', markerColor: 'Cyan' };
+      }
+      if (/music|audio|volume|loud|sfx|sound|voice|mic|bgm|track|-3db/.test(lower)) {
+        return { name: 'Audio/Music', color: 'bg-purple-100 dark:bg-[#131a42] text-[#8609fb] dark:text-purple-300 border-purple-200 dark:border-purple-700/60', markerColor: 'Green' };
+      }
+      if (/cut|trim|pause|breath|pacing|speed|slow|b-roll|montage|clip|jump|transition/.test(lower)) {
+        return { name: 'Cut/Pacing', color: 'bg-purple-50 dark:bg-[#0d122e] text-purple-900 dark:text-purple-200 border-purple-200 dark:border-purple-800/60', markerColor: 'Blue' };
+      }
+      if (/color|grade|lut|green|warm|dark|bright|exposure|skin|saturation/.test(lower)) {
+        return { name: 'Color/Grade', color: 'bg-purple-100 dark:bg-[#151c4a] text-[#7701e4] dark:text-[#d8b4fe] border-purple-200 dark:border-purple-700/80', markerColor: 'Magenta' };
+      }
+      return { name: 'General/Fix', color: 'bg-purple-50 dark:bg-[#070a1c] text-slate-700 dark:text-slate-300 border-purple-200 dark:border-purple-800/60', markerColor: 'Yellow' };
+    }
+
+    function extractTimeData(rawStr) {
+      let cleaned = rawStr.trim();
+      let parts = [];
+
+      if (cleaned.endsWith('s') || cleaned.endsWith('S')) {
+        let val = parseFloat(cleaned.replace(/[sS]/g, '')) || 0;
+        return {
+          seconds: val,
+          display: formatShortTime(val)
+        };
+      }
+
+      parts = cleaned.split(/[:.\-’']/g).map(Number);
+
+      if (parts.length === 3) {
+        let sec = (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+        return { seconds: sec, display: `${parts[0]}:${String(parts[1]).padStart(2, '0')}:${String(parts[2]).padStart(2, '0')}` };
+      } else if (parts.length === 2) {
+        let sec = (parts[0] * 60) + parts[1];
+        return { seconds: sec, display: `${parts[0]}:${String(parts[1]).padStart(2, '0')}` };
+      }
+
+      let singleSec = parts[0] || 0;
+      return { seconds: singleSec, display: formatShortTime(singleSec) };
+    }
+
+    function secondsToSMPTE(totalSec, fps = 25) {
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = Math.floor(totalSec % 60);
+      const f = Math.floor((totalSec % 1) * fps);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}:${String(f).padStart(2, '0')}`;
+    }
+
+    function formatShortTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function parseFeedback(isManualClick = false) {
+      const text = document.getElementById('rawFeedbackInput').value;
+      const fps = parseFloat(document.getElementById('selFPS').value) || 25;
+      const lines = text.split('\n');
+      const tasks = [];
+      let unparsedLinesCount = 0;
+
+      const timeRegex = /(?:at\s*|@\s*)?(\b\d{1,2}[:.\-’']\d{1,2}(?:[:.\-’']\d{1,2})?|\b\d{1,3}[sS]\b)/;
+
+      lines.forEach((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+
+        const match = trimmed.match(timeRegex);
+        if (match) {
+          const timeInfo = extractTimeData(match[1]);
+          let note = trimmed.replace(match[0], '').replace(/^[-:,\s]+/, '').trim();
+          if (!note) note = 'Review revision at timestamp';
+
+          tasks.push({
+            id: 'item_' + Date.now() + '_' + idx,
+            seconds: timeInfo.seconds,
+            timestampStr: secondsToSMPTE(timeInfo.seconds, fps),
+            shortTime: timeInfo.display,
+            note: note,
+            category: detectCategory(trimmed),
+            priority: /urgent|asap|important|must/i.test(trimmed),
+            done: false
+          });
+        } else {
+          unparsedLinesCount++;
+          tasks.push({
+            id: 'item_' + Date.now() + '_' + idx,
+            seconds: 999999,
+            timestampStr: '00:00:00:00',
+            shortTime: 'GENERAL',
+            note: trimmed.replace(/^[-*•\s]+/, ''),
+            category: detectCategory(trimmed),
+            priority: /urgent|asap|important|must/i.test(trimmed),
+            done: false
+          });
+        }
+      });
+
+      const warningPanel = document.getElementById('formatWarningPanel');
+      if (unparsedLinesCount > 0 && lines.filter(l => l.trim().length > 0).length > 0) {
+        warningPanel.classList.remove('hidden');
+      } else {
+        warningPanel.classList.add('hidden');
+      }
+
+      tasks.sort((a, b) => a.seconds - b.seconds);
+      parsedTasks = tasks;
+
+      document.getElementById('lblDetectedCount').textContent = tasks.length;
+      renderChecklist();
+
+      if (isManualClick) {
+        showToast(`Loaded ${tasks.length} revisions into checklist!`);
+      }
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = '';
+
+      const filtered = parsedTasks.filter(item => {
+        if (currentFilter === 'pending') return !item.done;
+        if (currentFilter === 'done') return item.done;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-white dark:bg-[#070a1c] rounded-2xl border border-dashed border-purple-200 dark:border-purple-800/60">
+            <div class="text-xs font-bold text-slate-700 dark:text-slate-300">No revisions found</div>
+            <p class="text-[11px] text-slate-400 mt-1">Paste your notes on the left and click "Parse & Load Revisions".</p>
+          </div>
+        `;
+        updateProgressStatus();
+        return;
+      }
+
+      filtered.forEach((task) => {
+        const item = document.createElement('div');
+        item.className = `floating-pill-card p-3 rounded-2xl flex items-start gap-3 transition group ${task.done ? 'opacity-50 bg-slate-50 dark:bg-slate-900/40' : ''}`;
+        
+        item.innerHTML = `
+          <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="mt-1 w-4 h-4 rounded border-purple-300 dark:border-purple-800 text-[#7701e4] focus:ring-0 cursor-pointer accent-[#7701e4] shrink-0">
+          <div class="flex-1 min-w-0 text-xs">
+            <div class="flex flex-wrap items-center gap-1.5 mb-1">
+              <button type="button" onclick="copyToClipboard('${task.shortTime}', 'Timecode ${task.shortTime} copied!')" class="px-2 py-0.5 rounded-md font-mono-code font-bold cursor-pointer transition ${task.shortTime === 'GENERAL' ? 'bg-purple-100 dark:bg-[#131a42] text-slate-700 dark:text-slate-300' : 'bg-purple-50 dark:bg-[#0d122e] text-[#7701e4] dark:text-[#c084fc] hover:bg-purple-100 border border-purple-200 dark:border-purple-800/80'}">
+                [${task.shortTime}]
+              </button>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${task.category.color}">
+                ${task.category.name}
+              </span>
+              ${task.priority ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 dark:bg-[#131a42] text-[#8609fb] dark:text-[#c084fc] border border-purple-300 dark:border-purple-700">PRIORITY</span>' : ''}
+            </div>
+            <span class="font-semibold text-[#0F172A] dark:text-slate-100 leading-relaxed break-words ${task.done ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${escapeHtml(task.note)}</span>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      updateProgressStatus();
+    }
+
+    function toggleTask(id) {
+      const target = parsedTasks.find(t => t.id === id);
+      if (target) {
+        target.done = !target.done;
+        renderChecklist();
+      }
+    }
+
+    function markAllCompleted() {
+      if (parsedTasks.length === 0) return;
+      const allDone = parsedTasks.every(t => t.done);
+      parsedTasks.forEach(t => t.done = !allDone);
+      renderChecklist();
+    }
+
+    function updateProgressStatus() {
+      const total = parsedTasks.length;
+      const doneCount = parsedTasks.filter(t => t.done).length;
+      const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+
+      document.getElementById('lblProgressStatus').textContent = `${doneCount} of ${total} addressed (${pct}%)`;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+      document.getElementById('lblItemsCountBadge').textContent = `${total} Items`;
+    }
+
+    function clearFeedback() {
+      document.getElementById('rawFeedbackInput').value = '';
+      parseFeedback();
+    }
+
+    function loadSampleFeedback() {
+      document.getElementById('rawFeedbackInput').value = 
+`1:29 lower the background music volume by -3dB
+1.34 color grade looks too green on the speaker's face
+1-64 cut that awkward breath/pause between sentences
+6'67 typo in the lower third caption: change 'recieve'
+45s add sound effect when logo animates
+45s export in 4K resolution with clean audio master`;
+      parseFeedback(true);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Filter Buttons logic
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.className = 'filter-btn px-3 py-1 rounded-full bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] text-slate-700 dark:text-slate-300 text-[11px] font-bold border border-purple-200 dark:border-purple-800/80 cursor-pointer transition shadow-sm';
+        });
+        btn.className = 'filter-btn px-3 py-1 rounded-full btn-gradient text-white text-[11px] font-bold cursor-pointer transition shadow-sm';
+        currentFilter = btn.getAttribute('data-filter') || 'all';
+        renderChecklist();
+      });
+    });
+
+    // Export Handlers
+    function copyChecklist() {
+      if (parsedTasks.length === 0) {
+        showToast('No revisions to copy!');
+        return;
+      }
+      const text = parsedTasks.map(t => `${t.done ? '[✓]' : '[ ]'} ${t.shortTime} - ${t.note}`).join('\n');
+      copyToClipboard(text, 'Checklist copied to clipboard!');
+      const lbl = document.getElementById('lblCopyChecklist');
+      lbl.textContent = 'Copied!';
+      setTimeout(() => { lbl.textContent = 'Copy Checklist'; }, 2000);
+    }
+
+    function downloadCSVMarkers() {
+      if (parsedTasks.length === 0) {
+        showToast('No revisions to export!');
+        return;
+      }
+      const fps = parseFloat(document.getElementById('selFPS').value) || 25;
+      let csv = 'Marker Name,Description,In,Out,Duration,Marker Type\n';
+
+      parsedTasks.forEach((t, i) => {
+        if (t.seconds < 999999) {
+          const inTc = secondsToSMPTE(t.seconds, fps);
+          const outTc = secondsToSMPTE(t.seconds + 1, fps);
+          const desc = `"${t.note.replace(/"/g, '""')}"`;
+          csv += `Rev ${i + 1},${desc},${inTc},${outTc},00:00:01:00,${t.category.markerColor}\n`;
+        }
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Xentro_Client_Markers.csv`;
+      a.click();
+      showToast('Markers (.CSV) downloaded!');
+    }
+
+    function downloadAEScript() {
+      if (parsedTasks.length === 0) {
+        showToast('No revisions to export!');
+        return;
+      }
+      const validMarkers = parsedTasks.filter(t => t.seconds < 999999);
+      const script = 
+`// Xentro Studios AE Marker Generator
+(function() {
+  var comp = app.project.activeItem;
+  if (!(comp && comp instanceof CompItem)) {
+    alert("Please select an active composition.");
+    return;
+  }
+  app.beginUndoGroup("Import Xentro Markers");
+  var markers = ${JSON.stringify(validMarkers.map(t => ({ time: t.seconds, comment: t.note })))};
+  for (var i = 0; i < markers.length; i++) {
+    var myMarker = new MarkerValue(markers[i].comment);
+    comp.markerProperty.setValueAtTime(markers[i].time, myMarker);
+  }
+  app.endUndoGroup();
+})();`;
+
+      const blob = new Blob([script], { type: 'text/javascript;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Xentro_Markers_AE.jsx`;
+      a.click();
+      showToast('After Effects marker script (.jsx) downloaded!');
+    }
+
+    // Auto-parse on typing
+    document.getElementById('rawFeedbackInput').addEventListener('input', () => parseFeedback(false));
+
+    // ==================== TAB 3 ENGINE (BITRATE & FILE SIZE) ====================
+    let durationSeconds = 60;
+    let videoBitrateMbps = 16;
+    let audioBitrateKbps = 192;
+    let currentCodec = 'h264';
+    let currentRes = '1080p';
+    let currentFps = 30;
+
+    const codecDefaults = {
+      h264: { '720p': 8, '1080p': 16, '4k': 45, '8k': 120, sliderMax: 150, type: 'Interframe / Web' },
+      h265: { '720p': 5, '1080p': 10, '4k': 28, '8k': 80, sliderMax: 120, type: 'Interframe / High Efficiency' },
+      prores_422: { '720p': 65, '1080p': 147, '4k': 589, '8k': 2356, sliderMax: 2500, type: 'Intraframe / Broadcast Master' },
+      prores_hq: { '720p': 98, '1080p': 220, '4k': 880, '8k': 3520, sliderMax: 3600, type: 'Intraframe / High Quality Master' },
+      prores_4444: { '720p': 147, '1080p': 330, '4k': 1320, '8k': 5280, sliderMax: 5500, type: 'Intraframe / 12-Bit Alpha' },
+      dnxhr_hq: { '720p': 88, '1080p': 176, '4k': 704, '8k': 2816, sliderMax: 3000, type: 'Intraframe / Avid Master' }
+    };
+
+    const durHours = document.getElementById('dur-hours');
+    const durMins = document.getElementById('dur-mins');
+    const durSecs = document.getElementById('dur-secs');
+    const totalDurationBadge = document.getElementById('total-duration-badge');
+
+    const codecSelect = document.getElementById('codec-select');
+    const resolutionSelect = document.getElementById('resolution-select');
+    const fpsSelect = document.getElementById('fps-select');
+    const codecTypeBadge = document.getElementById('codec-type-badge');
+
+    const bitrateNumber = document.getElementById('bitrate-number');
+    const bitrateSlider = document.getElementById('bitrate-slider');
+    const sliderMaxLabel = document.getElementById('slider-max-label');
+
+    const outputMb = document.getElementById('output-mb');
+    const outputGb = document.getElementById('output-gb');
+    const outputBuffer = document.getElementById('output-buffer');
+    const breakdownVideo = document.getElementById('breakdown-video');
+    const breakdownAudio = document.getElementById('breakdown-audio');
+    const barVideo = document.getElementById('bar-video');
+    const barAudio = document.getElementById('bar-audio');
+
+    const targetCapInput = document.getElementById('target-cap-input');
+    const reverseBitrateOut = document.getElementById('reverse-bitrate-out');
+
+    const time25 = document.getElementById('time-25mbps');
+    const time100 = document.getElementById('time-100mbps');
+    const time300 = document.getElementById('time-300mbps');
+    const time1000 = document.getElementById('time-1000mbps');
+
+    const btnCopyBitrate = document.getElementById('btn-copy-summary');
+    const copyBitrateText = document.getElementById('copy-btn-text');
+
+    function formatTimeSeconds(seconds) {
+      if (seconds < 1) return '<1s';
+      if (seconds < 60) return Math.round(seconds) + 's';
+      const m = Math.floor(seconds / 60);
+      const s = Math.round(seconds % 60);
+      if (m < 60) return `${m}m ${s}s`;
+      const h = Math.floor(m / 60);
+      const remM = m % 60;
+      return `${h}h ${remM}m`;
+    }
+
+    function calculateBitrate() {
+      const h = Math.max(0, parseInt(durHours.value) || 0);
+      const m = Math.max(0, parseInt(durMins.value) || 0);
+      const s = Math.max(0, parseInt(durSecs.value) || 0);
+      durationSeconds = (h * 3600) + (m * 60) + s;
+
+      const hh = String(h).padStart(2, '0');
+      const mm = String(m).padStart(2, '0');
+      const ss = String(s).padStart(2, '0');
+      totalDurationBadge.textContent = `${hh}:${mm}:${ss} (${durationSeconds}s)`;
+
+      const videoMB = (videoBitrateMbps * durationSeconds) / 8;
+      const audioMB = ((audioBitrateKbps / 1000) * durationSeconds) / 8;
+      const totalMB = videoMB + audioMB;
+      const totalGB = totalMB / 1024;
+      const bufferMB = totalMB * 1.05;
+
+      if (totalMB < 1000) {
+        outputMb.textContent = totalMB.toFixed(1);
+      } else {
+        outputMb.textContent = totalMB.toLocaleString('en-US', { maximumFractionDigits: 1 });
+      }
+      outputGb.textContent = totalGB >= 1 ? totalGB.toFixed(2) : totalGB.toFixed(3);
+
+      outputBuffer.textContent = `~${(bufferMB >= 1000 ? (bufferMB/1024).toFixed(2) + ' GB' : bufferMB.toFixed(1) + ' MB')}`;
+      breakdownVideo.textContent = `${videoMB.toFixed(1)} MB`;
+      breakdownAudio.textContent = `${audioMB.toFixed(1)} MB`;
+
+      const videoPct = totalMB > 0 ? (videoMB / totalMB) * 100 : 98;
+      const audioPct = 100 - videoPct;
+      barVideo.style.width = `${Math.min(99.5, Math.max(0.5, videoPct))}%`;
+      barAudio.style.width = `${Math.min(99.5, Math.max(0.5, audioPct))}%`;
+
+      const targetMB = parseFloat(targetCapInput.value) || 0;
+      if (targetMB > 0 && durationSeconds > 0) {
+        const audioTotalMB = ((audioBitrateKbps / 1000) * durationSeconds) / 8;
+        const availableVideoMB = Math.max(0.1, targetMB - audioTotalMB);
+        const solvedBitrate = (availableVideoMB * 8) / durationSeconds;
+        reverseBitrateOut.textContent = solvedBitrate >= 10 ? solvedBitrate.toFixed(1) : solvedBitrate.toFixed(2);
+      } else {
+        reverseBitrateOut.textContent = '0.00';
+      }
+
+      const totalMbits = totalMB * 8;
+      time25.textContent = formatTimeSeconds(totalMbits / 25);
+      time100.textContent = formatTimeSeconds(totalMbits / 100);
+      time300.textContent = formatTimeSeconds(totalMbits / 300);
+      time1000.textContent = formatTimeSeconds(totalMbits / 1000);
+    }
+
+    function updateCodecDefaults() {
+      currentCodec = codecSelect.value;
+      currentRes = resolutionSelect.value;
+      currentFps = parseInt(fpsSelect.value);
+
+      const profile = codecDefaults[currentCodec];
+      codecTypeBadge.textContent = profile.type;
+
+      let baseRate = profile[currentRes];
+      if (currentFps === 60) {
+        baseRate = currentCodec.startsWith('prores') || currentCodec.startsWith('dnxhr') ? baseRate * 2 : baseRate * 1.4;
+      } else if (currentFps === 24 && !currentCodec.startsWith('prores')) {
+        baseRate = baseRate * 0.9;
+      }
+
+      videoBitrateMbps = Math.round(baseRate * 10) / 10;
+      bitrateNumber.value = videoBitrateMbps;
+
+      bitrateSlider.max = profile.sliderMax;
+      sliderMaxLabel.textContent = `${profile.sliderMax} Mbps (Max)`;
+      bitrateSlider.value = Math.min(profile.sliderMax, videoBitrateMbps);
+
+      calculateBitrate();
+    }
+
+    [durHours, durMins, durSecs].forEach(input => {
+      input.addEventListener('input', calculateBitrate);
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        durHours.value = btn.dataset.h;
+        durMins.value = btn.dataset.m;
+        durSecs.value = btn.dataset.s;
+        calculateBitrate();
+      });
+    });
+
+    codecSelect.addEventListener('change', updateCodecDefaults);
+    resolutionSelect.addEventListener('change', updateCodecDefaults);
+    fpsSelect.addEventListener('change', updateCodecDefaults);
+
+    bitrateSlider.addEventListener('input', () => {
+      videoBitrateMbps = parseFloat(bitrateSlider.value);
+      bitrateNumber.value = videoBitrateMbps;
+      calculateBitrate();
+    });
+
+    bitrateNumber.addEventListener('input', () => {
+      videoBitrateMbps = Math.max(0.1, parseFloat(bitrateNumber.value) || 0.1);
+      bitrateSlider.value = Math.min(bitrateSlider.max, videoBitrateMbps);
+      calculateBitrate();
+    });
+
+    document.querySelectorAll('.audio-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.audio-btn').forEach(b => {
+          b.className = 'audio-btn py-1.5 px-2 bg-[#F8FAFC] dark:bg-[#070a1c] border border-slate-200 dark:border-purple-800/70 hover:border-[#7701e4] rounded-lg text-[11px] font-bold text-slate-700 dark:text-slate-300 transition text-center cursor-pointer';
+          const sub = b.querySelector('span');
+          if (sub) sub.className = 'text-[9px] block text-slate-400 dark:text-slate-500 font-normal';
+        });
+        btn.className = 'audio-btn py-1.5 px-2 btn-gradient text-white border border-transparent rounded-lg text-[11px] font-bold transition text-center cursor-pointer';
+        const subActive = btn.querySelector('span');
+        if (subActive) subActive.className = 'text-[9px] block text-purple-100 font-normal';
+
+        audioBitrateKbps = parseInt(btn.dataset.kbps);
+        calculateBitrate();
+      });
+    });
+
+    targetCapInput.addEventListener('input', calculateBitrate);
+    document.querySelectorAll('.cap-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        targetCapInput.value = btn.dataset.mb;
+        calculateBitrate();
+      });
+    });
+
+    document.querySelectorAll('.platform-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        codecSelect.value = 'h264';
+        videoBitrateMbps = parseFloat(chip.dataset.rate);
+        bitrateNumber.value = videoBitrateMbps;
+        bitrateSlider.value = videoBitrateMbps;
+        calculateBitrate();
+      });
+    });
+
+    btnCopyBitrate.addEventListener('click', () => {
+      const summaryText = 
+`--- VIDEO EXPORT SPECS (XENTRO STUDIOS) ---
+Duration: ${durHours.value}h ${durMins.value}m ${durSecs.value}s (${durationSeconds}s)
+Codec: ${codecSelect.options[codecSelect.selectedIndex].text}
+Resolution: ${resolutionSelect.options[resolutionSelect.selectedIndex].text}
+Frame Rate: ${fpsSelect.options[fpsSelect.selectedIndex].text}
+Video Bitrate: ${videoBitrateMbps} Mbps
+Audio Bitrate: ${audioBitrateKbps} kbps
+------------------------------------------
+Estimated File Size: ${outputMb.textContent} MB (${outputGb.textContent} GB)
+Delivery Safety Buffer (+5%): ${outputBuffer.textContent}
+Target 100Mbps Upload Time: ${time100.textContent}
+Calculated via Xentro Studios Tools`;
+
+      copyToClipboard(summaryText, 'Export specs copied to clipboard!');
+      copyBitrateText.textContent = 'Copied to Clipboard!';
+      btnCopyBitrate.classList.remove('btn-gradient');
+      btnCopyBitrate.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+
+      setTimeout(() => {
+        copyBitrateText.textContent = 'Copy Export Specs for Client Brief';
+        btnCopyBitrate.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+        btnCopyBitrate.classList.add('btn-gradient');
+      }, 2000);
+    });
+
+    // Initial boot across all 3 tabs
+    calculateRate();
+    parseFeedback();
+    updateCodecDefaults();
+  </script>
+</body>
+</html>

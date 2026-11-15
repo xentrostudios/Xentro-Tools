@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subtitle Pacer | Xentro Studios</title>
+
+  <!-- Instant Theme Script to Prevent Flash -->
+  <script>
+    if (localStorage.getItem('xentro_theme') === 'dark' || 
+       (!localStorage.getItem('xentro_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Ambient Background Glow */
+    .draftr-bg {
+      background-color: #FAFAFC;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.10) 0px, transparent 55%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.07) 0px, transparent 40%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.05) 0px, transparent 45%);
+    }
+    .dark .draftr-bg {
+      background-color: #03050c;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(119, 1, 228, 0.22) 0px, transparent 60%),
+        radial-gradient(at 100% 20%, rgba(134, 9, 251, 0.14) 0px, transparent 45%),
+        radial-gradient(at 0% 40%, rgba(119, 1, 228, 0.12) 0px, transparent 50%);
+    }
+
+    /* Outer Wrapper Card */
+    .outer-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(119, 1, 228, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      border-radius: 28px;
+      transition: all 0.25s ease;
+    }
+    .dark .outer-card {
+      background: #0d122e;
+      border: 1px solid rgba(119, 1, 228, 0.38);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 22px 0 rgba(119, 1, 228, 0.18);
+    }
+    .outer-card:hover {
+      border-color: rgba(216, 180, 254, 0.9);
+      box-shadow: 0 14px 30px -4px rgba(119, 1, 228, 0.08);
+    }
+    .dark .outer-card:hover {
+      border-color: rgba(134, 9, 251, 0.65);
+      box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75), 0 0 30px 2px rgba(134, 9, 251, 0.28);
+    }
+
+    /* Primary Brand Gradient Buttons (#7701e4 to #8609fb) */
+    .btn-gradient {
+      background: linear-gradient(135deg, #7701e4 0%, #8609fb 100%);
+      box-shadow: 0 4px 14px 0 rgba(119, 1, 228, 0.35);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(135deg, #6400c2 0%, #7701e4 100%);
+      box-shadow: 0 6px 22px 0 rgba(134, 9, 251, 0.5);
+    }
+
+    /* Progress Bar */
+    .progress-bar-gradient {
+      background: linear-gradient(90deg, #7701e4 0%, #8609fb 50%, #c084fc 100%);
+      box-shadow: 0 2px 10px rgba(119, 1, 228, 0.45);
+    }
+
+    /* Tooltip Hover */
+    .info-wrap {
+      position: relative;
+    }
+    .info-popover {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      width: 260px;
+      z-index: 70;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .info-wrap:hover .info-popover,
+    .info-wrap:focus-within .info-popover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Range Slider */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #8609fb;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(134, 9, 251, 0.7);
+    }
+
+    /* Caption Outline */
+    .caption-outline {
+      text-shadow: 
+        -2px -2px 0 #000,  
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0 4px 18px rgba(0,0,0,0.95);
+    }
+
+    /* Animated Day/Night Pill Switcher */
+    .theme-toggle-btn {
+      position: relative;
+      width: 68px;
+      height: 32px;
+      border-radius: 9999px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .theme-toggle-btn .sky-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #60a5fa 0%, #93c5fd 100%);
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .clouds {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      width: 32px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+    .theme-toggle-btn .clouds::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .theme-toggle-btn .night-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #090d24 0%, #171d3d 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .theme-toggle-btn .stars {
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      font-size: 8px;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 12px 6px 0px #fff, 6px 12px 0px #fff;
+    }
+    .theme-toggle-btn .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .dark .theme-toggle-btn {
+      border-color: rgba(119, 1, 228, 0.4);
+    }
+    .dark .theme-toggle-btn .sky-bg {
+      opacity: 0;
+    }
+    .dark .theme-toggle-btn .night-bg {
+      opacity: 1;
+    }
+    .dark .theme-toggle-btn .toggle-thumb {
+      transform: translateX(36px);
+      background: #cbd5e1;
+      box-shadow: inset -2px -2px 0 0 #94a3b8, 0 0 8px rgba(203, 213, 225, 0.4);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #070a1c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2b1f55;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8609fb;
+    }
+  </style>
+</head>
+<body class="draftr-bg text-[#0F172A] dark:text-slate-100 min-h-screen flex flex-col justify-between selection:bg-[#7701e4] selection:text-white antialiased transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/70 dark:border-purple-900/40 bg-white/80 dark:bg-[#070b1e]/85 backdrop-blur-md px-4 sm:px-6 py-4 sticky top-0 z-40 shadow-sm transition-colors duration-300">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="https://xentro-tools.vercel.app/" target="_self" class="flex items-center gap-3.5 select-none group">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-600/30 group-hover:scale-105 transition duration-300">
+          X
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-xl font-extrabold tracking-tight text-[#0F172A] dark:text-white">Xentro</span>
+            <span class="text-xl font-extrabold tracking-tight text-[#8609fb]">Studios</span>
+          </div>
+          <span class="text-xs font-semibold text-[#64748B] dark:text-slate-400 tracking-tight mt-1">Create your own dreams</span>
+        </div>
+      </a>
+
+      <!-- Header Controls: Back to Tools + Day/Night Toggle -->
+      <div class="flex items-center gap-3.5">
+        <a href="https://xentro-tools.vercel.app/" target="_self" class="group flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#131a42] border border-slate-200/90 dark:border-purple-800/60 shadow-sm hover:border-[#7701e4] dark:hover:border-[#8609fb] hover:shadow-md transition-all duration-200">
+          <span class="w-5 h-5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-[#7701e4] dark:text-purple-300 group-hover:bg-[#7701e4] group-hover:text-white flex items-center justify-center transition-colors">
+            <svg class="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </span>
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-[#7701e4] dark:group-hover:text-[#c084fc] transition-colors">Back to Tools</span>
+        </a>
+
+        <!-- Animated Day/Night Pill Switcher -->
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <div class="sky-bg"><div class="clouds"></div></div>
+          <div class="night-bg"><div class="stars">✦</div></div>
+          <div class="toggle-thumb"></div>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Header Block -->
+  <section class="max-w-4xl w-full mx-auto text-center px-4 mt-8 mb-8">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 dark:bg-[#131a42] backdrop-blur border border-purple-100 dark:border-purple-700/60 text-[#7701e4] dark:text-purple-300 text-xs font-bold shadow-sm mb-3">
+      <span class="w-2 h-2 rounded-full bg-[#8609fb] animate-pulse"></span>
+      PACING ENGINE
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+      Subtitle Pacer
+    </h1>
+    <p class="text-xs sm:text-sm text-[#64748B] dark:text-slate-300 mt-2 max-w-2xl mx-auto font-medium">
+      Optimize readability, line breaks, and timing for Reels, Shorts, and longform video.
+    </p>
+  </section>
+
+  <!-- Workspace 2-Column Grid -->
+  <main class="max-w-6xl w-full mx-auto px-4 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
+    
+    <!-- LEFT COLUMN: SCRIPT, CONTROLS, EXPORTS (6 Cols) -->
+    <div class="lg:col-span-6 outer-card p-4 sm:p-5">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-[#EEF2FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Script Header & Mode Switch -->
+        <div class="flex items-center justify-between pb-2 border-b border-purple-100 dark:border-purple-800/60">
+          <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-sm">
+            SCRIPT INPUT
+          </span>
+          <div class="grid grid-cols-2 gap-1 p-1 bg-white dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 rounded-xl text-xs font-bold shadow-sm">
+            <button type="button" id="btnModeSocial" onclick="setPresetMode('social')" class="py-1 px-3 rounded-lg btn-gradient text-white shadow-sm transition cursor-pointer">
+              Social Punchy (9:16)
+            </button>
+            <button type="button" id="btnModeWide" onclick="setPresetMode('wide')" class="py-1 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer">
+              Standard Subtitle (16:9)
+            </button>
+          </div>
+        </div>
+
+        <!-- Textarea Input Area -->
+        <div class="space-y-1.5">
+          <textarea id="scriptInput" rows="5" class="w-full bg-white dark:bg-[#070a1c] border border-purple-200/80 dark:border-purple-800/80 focus:border-[#7701e4] focus:ring-4 focus:ring-[#7701e4]/10 rounded-2xl p-4 text-xs text-[#0F172A] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none transition leading-relaxed resize-y shadow-inner" placeholder="Paste script or transcription here...">Most editors lose viewers in the first three seconds because their captions look like an unformatted wall of text. Rhythmic pacing and clean line breaks keep eyes locked on your content.</textarea>
+          
+          <div class="flex items-center justify-between text-xs font-mono-code text-slate-500 dark:text-slate-400 px-1 pt-0.5">
+            <div class="flex items-center gap-3">
+              <span>Chars: <strong id="valChars" class="text-[#7701e4] dark:text-[#c084fc]">0</strong></span>
+              <span>Words: <strong id="valWords" class="text-[#8609fb] dark:text-[#d8b4fe]">0</strong></span>
+              <span>Cards: <strong id="valCards" class="text-[#7701e4] dark:text-[#c084fc]">0</strong></span>
+            </div>
+            <button type="button" onclick="clearScript()" class="text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 transition cursor-pointer text-xs font-bold">Clear</button>
+          </div>
+        </div>
+
+        <!-- Sliders & Checkbox Rules -->
+        <div class="space-y-3.5 pt-2 border-t border-purple-100 dark:border-purple-800/60">
+          
+          <!-- Max CPL Slider -->
+          <div class="space-y-1.5 bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-mono-code text-slate-600 dark:text-slate-300">
+              <span class="font-bold">Max Characters / Line</span>
+              <span id="lblCPL" class="text-[#7701e4] dark:text-[#c084fc] font-bold">20 CPL</span>
+            </div>
+            <input type="range" id="sliderCPL" min="14" max="45" step="1" value="20" class="w-full bg-slate-200 dark:bg-[#131a42] h-1.5 rounded-lg appearance-none cursor-pointer">
+          </div>
+
+          <!-- Pace WPM Slider -->
+          <div class="space-y-1.5 bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-mono-code text-slate-600 dark:text-slate-300">
+              <span class="font-bold">Reading Pace</span>
+              <span id="lblWPM" class="text-[#8609fb] dark:text-[#d8b4fe] font-bold">160 WPM</span>
+            </div>
+            <input type="range" id="sliderWPM" min="120" max="220" step="5" value="160" class="w-full bg-slate-200 dark:bg-[#131a42] h-1.5 rounded-lg appearance-none cursor-pointer">
+          </div>
+
+          <!-- Inline Toggles -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div class="p-3 bg-white dark:bg-[#070a1c] rounded-xl border border-purple-200 dark:border-purple-800/80 flex items-center justify-between select-none shadow-sm">
+              <label class="flex items-center gap-2 cursor-pointer text-slate-700 dark:text-slate-300 font-bold">
+                <input type="checkbox" id="chkOrphans" checked class="w-4 h-4 rounded border-purple-300 dark:border-purple-800 text-[#7701e4] focus:ring-0 cursor-pointer accent-[#7701e4]">
+                <span>Avoid Orphans</span>
+              </label>
+            </div>
+            <div class="p-3 bg-white dark:bg-[#070a1c] rounded-xl border border-purple-200 dark:border-purple-800/80 flex items-center justify-between select-none shadow-sm">
+              <label class="flex items-center gap-2 cursor-pointer text-slate-700 dark:text-slate-300 font-bold">
+                <input type="checkbox" id="chkPunctuation" checked class="w-4 h-4 rounded border-purple-300 dark:border-purple-800 text-[#7701e4] focus:ring-0 cursor-pointer accent-[#7701e4]">
+                <span>Pause on Punctuation</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Integrated Software Workflow Hover Pills -->
+        <div class="pt-2 border-t border-purple-100 dark:border-purple-800/60 space-y-2">
+          <div class="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-extrabold">Software Guides</div>
+          <div class="grid grid-cols-3 gap-2">
+            
+            <!-- Premiere Pro -->
+            <div class="info-wrap">
+              <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#7701e4]"></span>
+                <span>Premiere</span>
+                <span class="text-[10px] text-[#7701e4] dark:text-purple-300 font-mono-code">ⓘ</span>
+              </button>
+              <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                <div class="text-[11px] font-bold text-[#7701e4] dark:text-purple-300 uppercase mb-1">Premiere Pro Captions</div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">Drag the downloaded <code class="text-[#7701e4] dark:text-purple-300 font-mono-code bg-purple-50 dark:bg-[#131a42] px-1 rounded">.srt</code> into your timeline to create a Captions track, or paste clean text directly into Essential Graphics.</p>
+              </div>
+            </div>
+
+            <!-- DaVinci Resolve -->
+            <div class="info-wrap">
+              <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#8609fb]"></span>
+                <span>DaVinci</span>
+                <span class="text-[10px] text-[#8609fb] dark:text-purple-300 font-mono-code">ⓘ</span>
+              </button>
+              <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                <div class="text-[11px] font-bold text-[#8609fb] dark:text-purple-300 uppercase mb-1">DaVinci Resolve</div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">File &rarr; Import &rarr; Subtitle. Right-click the subtitle header &rarr; <em>Convert to Text+</em> to link keyframe motion and styles.</p>
+              </div>
+            </div>
+
+            <!-- After Effects -->
+            <div class="info-wrap">
+              <button type="button" class="w-full py-2 px-2 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#c084fc]"></span>
+                <span>After Effects</span>
+                <span class="text-[10px] text-[#7701e4] dark:text-[#c084fc] font-mono-code">ⓘ</span>
+              </button>
+              <div class="info-popover bg-white dark:bg-[#0d122e] p-3.5 shadow-2xl rounded-2xl border border-purple-200 dark:border-purple-700/70 text-left">
+                <div class="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase mb-1">After Effects</div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-snug">Paste clean text directly into your keyframed text animators, or import <code class="text-purple-700 dark:text-purple-300 font-mono-code bg-purple-50 dark:bg-[#131a42] px-1 rounded">.csv</code> to drive layer markers.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Action & Export Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-purple-100 dark:border-purple-800/60">
+          <button type="button" id="btnCopy" onclick="copyCleanText()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+            <svg class="w-3.5 h-3.5 text-[#7701e4] dark:text-[#c084fc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="lblCopy">Copy Clean Text</span>
+          </button>
+
+          <button type="button" onclick="downloadSRT()" class="py-2.5 px-3 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+            <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download .SRT</span>
+          </button>
+
+          <button type="button" onclick="downloadCSV()" class="py-2.5 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+            <svg class="w-3.5 h-3.5 text-[#8609fb]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Download .CSV</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: MINIMALIST TYPOGRAPHY STRIP & VISUAL STAGE (6 Cols) -->
+    <div class="lg:col-span-6 outer-card p-4 sm:p-5">
+      <div class="w-full rounded-2xl bg-gradient-to-br from-[#FAF5FF] via-[#F3E8FF] to-[#FAF5FF] dark:from-[#131a42] dark:via-[#151c4a] dark:to-[#182054] border border-purple-200/70 dark:border-purple-700/50 p-4 sm:p-5 flex flex-col gap-4 shadow-sm">
+        
+        <!-- Stage Header & Format Toggle -->
+        <div class="flex items-center justify-between pb-2 border-b border-purple-100 dark:border-purple-800/60">
+          <span class="px-3 py-1 rounded-full bg-white/95 dark:bg-[#0d122e] backdrop-blur text-[11px] font-extrabold uppercase tracking-wider text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-700/60 shadow-sm">
+            LIVE PREVIEW SANDBOX
+          </span>
+          <label class="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-[#7701e4] dark:hover:text-white select-none">
+            <input type="checkbox" id="chkLoop" checked class="w-4 h-4 rounded border-purple-300 dark:border-purple-800 text-[#7701e4] focus:ring-0 cursor-pointer accent-[#7701e4]">
+            <span>Loop</span>
+          </label>
+        </div>
+
+        <!-- ULTRA-COMPACT MINIMALIST TYPOGRAPHY STRIP (Strict Brand Purples) -->
+        <div class="h-10 px-3 bg-white dark:bg-[#070a1c] rounded-2xl flex items-center justify-between gap-2 border border-purple-200 dark:border-purple-800/80 shadow-sm">
+          
+          <!-- Font Family Selector Dropdown -->
+          <div class="relative shrink-0">
+            <select id="fontSelector" onchange="updateCaptionStyling()" class="bg-transparent text-[#0F172A] dark:text-white text-xs font-bold focus:outline-none cursor-pointer pr-4 appearance-none">
+              <option value="'Montserrat', sans-serif" selected class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white">Montserrat</option>
+              <option value="'Bebas Neue', sans-serif" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white">Bebas Neue</option>
+              <option value="'Inter', sans-serif" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white">Inter Bold</option>
+              <option value="Impact, sans-serif" class="bg-white dark:bg-[#070a1c] text-[#0F172A] dark:text-white">Impact</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
+
+          <div class="h-4 w-[1px] bg-purple-200 dark:bg-purple-800/80 shrink-0"></div>
+
+          <!-- Font Size Stepper -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="adjustFontSize(-2)" class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-slate-700 dark:text-slate-200 font-mono-code text-xs font-bold flex items-center justify-center transition cursor-pointer">-</button>
+            <span id="lblFontSize" class="text-xs font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc] w-9 text-center">26px</span>
+            <button type="button" onclick="adjustFontSize(2)" class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-slate-700 dark:text-slate-200 font-mono-code text-xs font-bold flex items-center justify-center transition cursor-pointer">+</button>
+          </div>
+
+          <div class="h-4 w-[1px] bg-purple-200 dark:bg-purple-800/80 shrink-0"></div>
+
+          <!-- Format Toggles: TT (All Caps) & B (Bold) -->
+          <div class="flex items-center gap-1 shrink-0">
+            <button type="button" id="btnToggleCaps" onclick="toggleAllCaps()" class="w-6 h-6 rounded-lg btn-gradient text-white font-bold text-[10px] flex items-center justify-center transition cursor-pointer" title="All Caps">
+              TT
+            </button>
+            <button type="button" id="btnToggleBold" onclick="toggleBold()" class="w-6 h-6 rounded-lg btn-gradient text-white font-black text-xs flex items-center justify-center transition cursor-pointer" title="Bold">
+              B
+            </button>
+          </div>
+
+          <div class="h-4 w-[1px] bg-purple-200 dark:bg-purple-800/80 shrink-0"></div>
+
+          <!-- Color Swatches (White, Brand Violet, Brand Lilac) & Outline Toggle -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="setCaptionColor('#ffffff')" class="w-4 h-4 rounded-full bg-white ring-1 ring-purple-300 focus:scale-110 transition cursor-pointer" title="White"></button>
+            <button type="button" onclick="setCaptionColor('#8609fb')" class="w-4 h-4 rounded-full bg-[#8609fb] ring-1 ring-purple-300 focus:scale-110 transition cursor-pointer" title="Brand Purple"></button>
+            <button type="button" onclick="setCaptionColor('#c084fc')" class="w-4 h-4 rounded-full bg-[#c084fc] ring-1 ring-purple-300 focus:scale-110 transition cursor-pointer" title="Lilac"></button>
+            
+            <!-- Stroke/Shadow Toggle ('S') -->
+            <button type="button" id="btnToggleOutline" onclick="toggleOutline()" class="w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-[#7701e4] dark:text-[#c084fc] font-bold text-xs flex items-center justify-center transition cursor-pointer ml-0.5" title="Toggle Stroke/Shadow">
+              S
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Live Simulator Stage -->
+        <div class="relative w-full h-[350px] bg-white dark:bg-[#070a1c] border border-purple-200/90 dark:border-purple-800/70 rounded-2xl overflow-hidden flex items-center justify-center shadow-inner">
+          
+          <!-- 9:16 Social Frame Overlay -->
+          <div id="frameSocial" class="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none transition-opacity duration-300">
+            <div class="flex items-center justify-between text-slate-500 dark:text-white/60 text-xs font-semibold">
+              <span>Reels</span>
+              <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+            </div>
+
+            <!-- Safe Zone Outline in Brand Lilac -->
+            <div class="absolute top-12 bottom-20 left-6 right-14 border border-dashed border-[#c084fc]/60 rounded-xl pointer-events-none flex items-start p-1.5">
+              <span class="text-[8px] font-mono-code font-bold text-[#7701e4] dark:text-[#c084fc] bg-purple-50 dark:bg-[#070a1c] border border-purple-200 dark:border-purple-800/80 px-1.5 py-0.5 rounded tracking-widest uppercase">Safe Zone</span>
+            </div>
+
+            <!-- Subtle Background Persona -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+              <div class="w-32 h-32 rounded-full bg-[#7701e4] blur-md"></div>
+            </div>
+
+            <!-- Reel Action Icons -->
+            <div class="absolute right-3.5 bottom-14 flex flex-col items-center gap-3 text-slate-600 dark:text-white/80">
+              <div class="flex flex-col items-center"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="text-[8px] font-mono-code font-bold mt-0.5">142K</span></div>
+              <div class="flex flex-col items-center"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="text-[8px] font-mono-code font-bold mt-0.5">1.2K</span></div>
+            </div>
+          </div>
+
+          <!-- 16:9 Scope Letterboxes -->
+          <div id="frameWideTop" class="hidden absolute inset-x-0 h-9 bg-black/90 z-20 pointer-events-none border-b border-white/5 top-0"></div>
+          <div id="frameWideBottom" class="hidden absolute inset-x-0 h-9 bg-black/90 z-20 pointer-events-none border-t border-white/5 bottom-0"></div>
+
+          <!-- Dynamic Live Subtitle Output -->
+          <div class="relative z-30 max-w-[85%] text-center px-4 py-2 pointer-events-none">
+            <div id="liveSubtitleText" class="tracking-tight leading-snug select-none caption-outline text-white uppercase font-black" style="font-family: 'Montserrat', sans-serif; font-size: 26px;">
+              <!-- Realtime dynamic text -->
+            </div>
+            <div id="lblCurrentCard" class="mt-3 text-[10px] font-mono-code text-[#7701e4] dark:text-[#c084fc] font-bold bg-white dark:bg-[#070a1c] px-2.5 py-0.5 rounded-full inline-block border border-purple-200 dark:border-purple-800/80 shadow">
+              Card 1 / 1
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Playback Timeline & Controls -->
+        <div class="space-y-3 pt-1">
+          <div class="space-y-1.5 bg-white/90 dark:bg-[#070a1c] p-3 rounded-xl border border-purple-100 dark:border-purple-800/60 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-mono-code text-slate-500 dark:text-slate-400">
+              <span class="font-bold">Timeline</span>
+              <span id="lblTimeline" class="text-[#7701e4] dark:text-[#c084fc] font-bold">0.0s / 0.0s</span>
+            </div>
+            <div class="h-2 bg-slate-100 dark:bg-[#131a42] rounded-full overflow-hidden border border-purple-100 dark:border-purple-800/60 cursor-pointer p-0.5" onclick="seekPlayback(event)">
+              <div id="timelineProgress" class="h-full progress-bar-gradient rounded-full w-0 transition-[width] duration-75"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <button type="button" id="btnPlayPause" onclick="togglePlay()" class="py-2 px-4 btn-gradient text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                <svg id="iconPlay" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg id="iconPause" class="w-3.5 h-3.5 fill-current hidden" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                <span id="lblPlayBtn">Play</span>
+              </button>
+
+              <button type="button" onclick="restartPlay()" class="py-2 px-3 bg-white dark:bg-[#070a1c] hover:bg-slate-50 dark:hover:bg-[#131a42] border border-purple-200 dark:border-purple-800/80 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition cursor-pointer shadow-sm" title="Replay">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+            </div>
+
+            <div class="text-xs font-mono-code text-slate-500 dark:text-slate-400">
+              Cadence: <span id="lblCadencePacing" class="text-[#8609fb] dark:text-[#c084fc] font-bold">Optimal</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Community Callout -->
+  <footer class="max-w-6xl w-full mx-auto px-4 pb-8">
+    <div class="outer-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-[14px] bg-[#7701e4] flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-purple-500/20">
+          X
+        </div>
+        <div>
+          <h4 class="text-xs font-extrabold text-[#0F172A] dark:text-white">Xentro Editor Council</h4>
+          <p class="text-[11px] text-[#64748B] dark:text-slate-400 font-medium">Join 500+ video editors sharing motion presets, project critiques, and freelance tips.</p>
+        </div>
+      </div>
+
+      <a href="https://chat.whatsapp.com/JRh8GHhmmwk9DzIK13NjHy" target="_blank" rel="noopener noreferrer" class="whitespace-nowrap px-5 py-2.5 btn-gradient text-white font-bold text-xs rounded-xl shadow-md transition text-center shrink-0">
+        Join Free Community &rarr;
+      </a>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-white/95 dark:bg-[#0d122e] backdrop-blur-md border border-purple-100 dark:border-purple-700/60 text-[#0F172A] dark:text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#8609fb]"></span>
+    <span id="toastMsg">Action complete</span>
+  </div>
+
+  <!-- Application Logic (Strict & Verified) -->
+  <script>
+    const app = {
+      mode: 'social',
+      maxCPL: 20,
+      wpm: 160,
+      avoidOrphans: true,
+      respectPunctuation: true,
+      segments: [],
+      totalDuration: 0,
+      // Typography
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: 26,
+      isAllCaps: true,
+      isBold: true,
+      fontColor: '#ffffff',
+      hasOutline: true,
+      // Playback
+      isPlaying: false,
+      currentTime: 0,
+      loop: true,
+      rafId: null,
+      lastTick: null
+    };
+
+    const scriptInput = document.getElementById('scriptInput');
+    const valChars = document.getElementById('valChars');
+    const valWords = document.getElementById('valWords');
+    const valCards = document.getElementById('valCards');
+    const sliderCPL = document.getElementById('sliderCPL');
+    const lblCPL = document.getElementById('lblCPL');
+    const sliderWPM = document.getElementById('sliderWPM');
+    const lblWPM = document.getElementById('lblWPM');
+    const chkOrphans = document.getElementById('chkOrphans');
+    const chkPunctuation = document.getElementById('chkPunctuation');
+    const btnModeSocial = document.getElementById('btnModeSocial');
+    const btnModeWide = document.getElementById('btnModeWide');
+    const frameSocial = document.getElementById('frameSocial');
+    const frameWideTop = document.getElementById('frameWideTop');
+    const frameWideBottom = document.getElementById('frameWideBottom');
+    
+    const fontSelector = document.getElementById('fontSelector');
+    const lblFontSize = document.getElementById('lblFontSize');
+    const btnToggleCaps = document.getElementById('btnToggleCaps');
+    const btnToggleBold = document.getElementById('btnToggleBold');
+    const btnToggleOutline = document.getElementById('btnToggleOutline');
+
+    const liveSubtitleText = document.getElementById('liveSubtitleText');
+    const lblCurrentCard = document.getElementById('lblCurrentCard');
+    const lblTimeline = document.getElementById('lblTimeline');
+    const timelineProgress = document.getElementById('timelineProgress');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const iconPlay = document.getElementById('iconPlay');
+    const iconPause = document.getElementById('iconPause');
+    const lblPlayBtn = document.getElementById('lblPlayBtn');
+    const chkLoop = document.getElementById('chkLoop');
+    const lblCopy = document.getElementById('lblCopy');
+    const lblCadencePacing = document.getElementById('lblCadencePacing');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('xentro_theme', isDark ? 'dark' : 'light');
+    }
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2000);
+    }
+
+    function copyToClipboard(text, msg) {
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(msg);
+    }
+
+    function updateCaptionStyling() {
+      app.fontFamily = fontSelector.value;
+      liveSubtitleText.style.fontFamily = app.fontFamily;
+      liveSubtitleText.style.fontSize = `${app.fontSize}px`;
+      liveSubtitleText.style.color = app.fontColor;
+      liveSubtitleText.style.textTransform = app.isAllCaps ? 'uppercase' : 'none';
+      liveSubtitleText.style.fontWeight = app.isBold ? '900' : '400';
+
+      if (app.hasOutline) {
+        liveSubtitleText.classList.add('caption-outline');
+      } else {
+        liveSubtitleText.classList.remove('caption-outline');
+      }
+    }
+
+    function adjustFontSize(delta) {
+      app.fontSize = Math.max(16, Math.min(54, app.fontSize + delta));
+      lblFontSize.textContent = `${app.fontSize}px`;
+      updateCaptionStyling();
+    }
+
+    function toggleAllCaps() {
+      app.isAllCaps = !app.isAllCaps;
+      if (app.isAllCaps) {
+        btnToggleCaps.className = 'w-6 h-6 rounded-lg btn-gradient text-white font-bold text-[10px] flex items-center justify-center transition cursor-pointer';
+      } else {
+        btnToggleCaps.className = 'w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-slate-400 font-bold text-[10px] flex items-center justify-center transition cursor-pointer';
+      }
+      updateCaptionStyling();
+    }
+
+    function toggleBold() {
+      app.isBold = !app.isBold;
+      if (app.isBold) {
+        btnToggleBold.className = 'w-6 h-6 rounded-lg btn-gradient text-white font-black text-xs flex items-center justify-center transition cursor-pointer';
+      } else {
+        btnToggleBold.className = 'w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-slate-400 font-normal text-xs flex items-center justify-center transition cursor-pointer';
+      }
+      updateCaptionStyling();
+    }
+
+    function setCaptionColor(hex) {
+      app.fontColor = hex;
+      updateCaptionStyling();
+    }
+
+    function toggleOutline() {
+      app.hasOutline = !app.hasOutline;
+      if (app.hasOutline) {
+        btnToggleOutline.className = 'w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-[#7701e4] dark:text-[#c084fc] font-bold text-xs flex items-center justify-center transition cursor-pointer ml-0.5';
+      } else {
+        btnToggleOutline.className = 'w-6 h-6 rounded-lg bg-purple-50 dark:bg-[#131a42] border border-purple-200 dark:border-purple-700 text-slate-400 font-normal text-xs flex items-center justify-center transition cursor-pointer ml-0.5';
+      }
+      updateCaptionStyling();
+    }
+
+    function setPresetMode(mode) {
+      app.mode = mode;
+      if (mode === 'social') {
+        btnModeSocial.className = 'py-1 px-3 rounded-lg btn-gradient text-white shadow-sm transition cursor-pointer';
+        btnModeWide.className = 'py-1 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+        sliderCPL.value = 20;
+        app.maxCPL = 20;
+        frameSocial.classList.remove('hidden');
+        frameWideTop.classList.add('hidden');
+        frameWideBottom.classList.add('hidden');
+      } else {
+        btnModeWide.className = 'py-1 px-3 rounded-lg btn-gradient text-white shadow-sm transition cursor-pointer';
+        btnModeSocial.className = 'py-1 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-[#7701e4] dark:hover:text-[#c084fc] transition cursor-pointer';
+        sliderCPL.value = 36;
+        app.maxCPL = 36;
+        frameSocial.classList.add('hidden');
+        frameWideTop.classList.remove('hidden');
+        frameWideBottom.classList.remove('hidden');
+      }
+      lblCPL.textContent = `${app.maxCPL} CPL`;
+      recalculate();
+    }
+
+    function clearScript() {
+      scriptInput.value = '';
+      recalculate();
+    }
+
+    scriptInput.addEventListener('input', recalculate);
+    sliderCPL.addEventListener('input', (e) => {
+      app.maxCPL = parseInt(e.target.value, 10);
+      lblCPL.textContent = `${app.maxCPL} CPL`;
+      recalculate();
+    });
+    sliderWPM.addEventListener('input', (e) => {
+      app.wpm = parseInt(e.target.value, 10);
+      lblWPM.textContent = `${app.wpm} WPM`;
+      recalculate();
+    });
+    chkOrphans.addEventListener('change', (e) => {
+      app.avoidOrphans = e.target.checked;
+      recalculate();
+    });
+    chkPunctuation.addEventListener('change', (e) => {
+      app.respectPunctuation = e.target.checked;
+      recalculate();
+    });
+    chkLoop.addEventListener('change', (e) => {
+      app.loop = e.target.checked;
+    });
+
+    function breakIntoLines(words, maxCpl) {
+      const lines = [];
+      let current = '';
+
+      for (let i = 0; i < words.length; i++) {
+        const w = words[i];
+        const test = current.length === 0 ? w : `${current} ${w}`;
+
+        if (test.length <= maxCpl) {
+          current = test;
+        } else {
+          if (current.length > 0) lines.push(current);
+          current = w;
+        }
+      }
+      if (current.length > 0) lines.push(current);
+
+      if (app.avoidOrphans && lines.length > 1) {
+        const last = lines[lines.length - 1];
+        if (!last.includes(' ') && lines[lines.length - 2].includes(' ')) {
+          const prev = lines[lines.length - 2].split(' ');
+          const donated = prev.pop();
+          lines[lines.length - 2] = prev.join(' ');
+          lines[lines.length - 1] = `${donated} ${last}`;
+        }
+      }
+
+      return lines;
+    }
+
+    function recalculate() {
+      const text = scriptInput.value.trim();
+      const charCount = text.length;
+      const wordsArr = charCount > 0 ? text.split(/\s+/) : [];
+      const wordCount = wordsArr.length;
+
+      valChars.textContent = charCount;
+      valWords.textContent = wordCount;
+
+      if (wordCount === 0) {
+        app.segments = [];
+        app.totalDuration = 0;
+        valCards.textContent = '0';
+        updateLiveCaption();
+        return;
+      }
+
+      const secPerWord = 60 / app.wpm;
+      const segments = [];
+      let currentWords = [];
+      let runningTime = 0;
+
+      for (let i = 0; i < wordsArr.length; i++) {
+        const word = wordsArr[i];
+        currentWords.push(word);
+
+        const testLines = breakIntoLines(currentWords, app.maxCPL);
+        const hasPunctuation = app.respectPunctuation && /[.!?,]$/.test(word);
+        const exceedsCapacity = testLines.length > 2;
+        const reachedPunctuationBreak = hasPunctuation && currentWords.length >= 3;
+
+        if (exceedsCapacity || reachedPunctuationBreak || i === wordsArr.length - 1) {
+          let cardWords = [...currentWords];
+          if (exceedsCapacity && currentWords.length > 1) {
+            cardWords.pop();
+            i--;
+          }
+
+          const cardLines = breakIntoLines(cardWords, app.maxCPL);
+          const cardText = cardLines.join('\n');
+          let duration = cardWords.length * secPerWord;
+          if (/[.!?]$/.test(cardWords[cardWords.length - 1])) {
+            duration += 0.2;
+          }
+          duration = Math.max(0.7, Math.round(duration * 100) / 100);
+
+          const start = runningTime;
+          const end = runningTime + duration;
+          runningTime = end;
+
+          segments.push({
+            index: segments.length + 1,
+            text: cardText,
+            startTime: start,
+            endTime: end,
+            duration: duration
+          });
+
+          currentWords = [];
+        }
+      }
+
+      app.segments = segments;
+      app.totalDuration = runningTime;
+      valCards.textContent = segments.length;
+
+      const avgCPS = (charCount / (runningTime || 1)).toFixed(1);
+      lblCadencePacing.textContent = avgCPS <= 18 ? 'Optimal' : (avgCPS <= 22 ? 'Brisk' : 'Fast');
+
+      updateLiveCaption();
+    }
+
+    function togglePlay() {
+      if (app.isPlaying) {
+        pause();
+      } else {
+        play();
+      }
+    }
+
+    function play() {
+      if (app.segments.length === 0) return;
+      if (app.currentTime >= app.totalDuration) app.currentTime = 0;
+      app.isPlaying = true;
+      app.lastTick = performance.now();
+      iconPlay.classList.add('hidden');
+      iconPause.classList.remove('hidden');
+      lblPlayBtn.textContent = 'Pause';
+      app.rafId = requestAnimationFrame(tick);
+    }
+
+    function pause() {
+      app.isPlaying = false;
+      if (app.rafId) cancelAnimationFrame(app.rafId);
+      iconPlay.classList.remove('hidden');
+      iconPause.classList.add('hidden');
+      lblPlayBtn.textContent = 'Play';
+    }
+
+    function restartPlay() {
+      pause();
+      app.currentTime = 0;
+      updateLiveCaption();
+      play();
+    }
+
+    function tick(now) {
+      if (!app.isPlaying) return;
+      const dt = (now - app.lastTick) / 1000;
+      app.lastTick = now;
+
+      app.currentTime += dt;
+
+      if (app.currentTime >= app.totalDuration) {
+        if (app.loop) {
+          app.currentTime = 0;
+        } else {
+          app.currentTime = app.totalDuration;
+          pause();
+          updateLiveCaption();
+          return;
+        }
+      }
+
+      updateLiveCaption();
+      app.rafId = requestAnimationFrame(tick);
+    }
+
+    function seekPlayback(e) {
+      if (app.totalDuration === 0) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      app.currentTime = pct * app.totalDuration;
+      updateLiveCaption();
+    }
+
+    function updateLiveCaption() {
+      const cur = app.currentTime;
+      const tot = app.totalDuration;
+      lblTimeline.textContent = `${cur.toFixed(1)}s / ${tot.toFixed(1)}s`;
+      timelineProgress.style.width = `${tot > 0 ? (cur / tot) * 100 : 0}%`;
+
+      if (app.segments.length === 0) {
+        liveSubtitleText.innerHTML = `<span class="text-slate-400 font-medium text-base">Paste script above...</span>`;
+        lblCurrentCard.textContent = `Card 0 / 0`;
+        return;
+      }
+
+      let activeSeg = app.segments[0];
+      for (let i = 0; i < app.segments.length; i++) {
+        if (cur >= app.segments[i].startTime && cur <= app.segments[i].endTime) {
+          activeSeg = app.segments[i];
+          break;
+        }
+      }
+
+      liveSubtitleText.innerText = activeSeg.text;
+      lblCurrentCard.textContent = `Card ${activeSeg.index} / ${app.segments.length}`;
+    }
+
+    function toSRTTime(t) {
+      const h = Math.floor(t / 3600);
+      const m = Math.floor((t % 3600) / 60);
+      const s = Math.floor(t % 60);
+      const ms = Math.floor((t % 1) * 1000);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')},${String(ms).padStart(3, '0')}`;
+    }
+
+    function toSMPTE(t, fps = 30) {
+      const h = Math.floor(t / 3600);
+      const m = Math.floor((t % 3600) / 60);
+      const s = Math.floor(t % 60);
+      const f = Math.floor((t % 1) * fps);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}:${String(f).padStart(2, '0')}`;
+    }
+
+    function copyCleanText() {
+      if (app.segments.length === 0) return;
+      const text = app.segments.map(s => s.text).join('\n\n');
+      copyToClipboard(text, 'Clean formatted captions copied!');
+      lblCopy.textContent = 'Copied!';
+      setTimeout(() => { lblCopy.textContent = 'Copy Clean Text'; }, 2000);
+    }
+
+    function downloadSRT() {
+      if (app.segments.length === 0) return;
+      let srt = '';
+      app.segments.forEach(s => {
+        srt += `${s.index}\n${toSRTTime(s.startTime)} --> ${toSRTTime(s.endTime)}\n${s.text}\n\n`;
+      });
+      const blob = new Blob([srt], { type: 'text/plain;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Xentro_Captions_${app.maxCPL}CPL.srt`;
+      a.click();
+      showToast('Downloaded .SRT file!');
+    }
+
+    function downloadCSV() {
+      if (app.segments.length === 0) return;
+      let csv = 'Marker Name,Description,In,Out,Duration,Marker Type\n';
+      app.segments.forEach(s => {
+        const inTc = toSMPTE(s.startTime, 30);
+        const outTc = toSMPTE(s.endTime, 30);
+        const durTc = toSMPTE(s.duration, 30);
+        const desc = `"${s.text.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
+        csv += `Card ${s.index},${desc},${inTc},${outTc},${durTc},Comment\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Xentro_Markers.csv`;
+      a.click();
+      showToast('Downloaded .CSV markers!');
+    }
+
+    updateCaptionStyling();
+    recalculate();
+    play();
+  </script>
+</body>
+</html>
